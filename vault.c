@@ -407,14 +407,6 @@ void remove_file(const char *fileName)
 // Function to write a bucket of random records to disk
 void writeBucketToDisk(const Bucket *bucket, int fd, off_t offset)
 {
-
-	// printf("writeBucketToDisk()\n");
-	// bool buffered = false;
-
-	// struct iovec iov[1];
-	//     iov[0].iov_base = bucket->records;
-	//     iov[0].iov_len = sizeof(MemoRecord) * bucket->count;
-
 	if (DEBUG)
 		printf("writeBucketToDisk(): %ld %lu %d %lld %zu\n", offset, sizeof(MemoRecord), BUCKET_SIZE, WRITE_SIZE, bucket->flush);
 	if (DEBUG)
@@ -425,18 +417,6 @@ void writeBucketToDisk(const Bucket *bucket, int fd, off_t offset)
 		close(fd);
 		exit(EXIT_FAILURE);
 	}
-
-	// Write the entire bucket to the file
-	//    ssize_t bytes_written = writev(fd, iov, 1);
-	//    if (bytes_written < 0) {
-	//        perror("Error writing to file");
-	//        close(fd);
-	//        exit(EXIT_FAILURE);
-	//    } else if (bytes_written != sizeof(MemoRecord) * bucket->count) {
-	//        fprintf(stderr, "Incomplete write to file\n");
-	//        close(fd);
-	//        exit(EXIT_FAILURE);
-	//    }
 
 	long long bytesWritten = write(fd, bucket->records, sizeof(MemoRecord) * bucket->count);
 	if (bytesWritten < 0)
@@ -450,95 +430,12 @@ void writeBucketToDisk(const Bucket *bucket, int fd, off_t offset)
 		printf("writeBucketToDisk(): bytesWritten=%lld %lu\n", bytesWritten, sizeof(MemoRecord) * bucket->count);
 }
 
-// off_t getBucketIndex(const uint8_t *hash) {
-//     // Calculate the bucket index based on the first 2-byte prefix
-//     return (hash[0] << 8) | hash[1];
-// }
-
-/*
-off_t byteArrayToUnsignedLongLongBigEndian(const uint8_t *byteArray, size_t bits) {
-	off_t result = 0;
-
-	// Calculate the number of bytes to process (up to 8 bytes)
-	//size_t numBytes = size < sizeof(uint64_t) ? size : sizeof(uint64_t);
-
-	// Calculate the number of bytes to process (up to 8 bytes)
-	size_t numBytes = (bits + 7) / 8;
-	size_t max_value = pow(2, bits);
-
-	// Combine the bytes into the resulting unsigned long long integer
-	for (size_t i = 0; i < numBytes; ++i) {
-		result |= ((off_t)byteArray[i]) << (i * 8);
-	}
-
-	return result%max_value;
-}
-
-off_t byteArrayToUnsignedLongLongLittleEndian(const uint8_t *byteArray, size_t bits) {
-	off_t result = 0;
-
-	// Calculate the number of bytes to process (up to 8 bytes)
-	size_t numBytes = (bits + 7) / 8;
-	size_t max_value = pow(2, bits);
-
-	// Combine the bytes into the resulting unsigned long long integer in little-endian format
-	for (size_t i = 0; i < numBytes; ++i) {
-		result |= ((off_t)byteArray[i]) << (i * 8);
-	}
-
-	return result%max_value;
-}
-*/
-/*
-uint64_t byteArrayToUnsignedLongLongBigEndian(uint8_t byteArray[]) {
-	uint64_t result = 0;
-
-	result |= ((uint64_t)byteArray[0]) << 56;
-	result |= ((uint64_t)byteArray[1]) << 48;
-	result |= ((uint64_t)byteArray[2]) << 40;
-	result |= ((uint64_t)byteArray[3]) << 32;
-	result |= ((uint64_t)byteArray[4]) << 24;
-	result |= ((uint64_t)byteArray[5]) << 16;
-	result |= ((uint64_t)byteArray[6]) << 8;
-	result |= byteArray[7];
-
-	return result;
-}
-
-uint64_t byteArrayToUnsignedLongLongLittleEndian(uint8_t byteArray[]) {
-	uint64_t result = 0;
-
-	result |= ((uint64_t)byteArray[0]) << 0;
-	result |= ((uint64_t)byteArray[1]) << 8;
-	result |= ((uint64_t)byteArray[2]) << 16;
-	result |= ((uint64_t)byteArray[3]) << 24;
-	result |= ((uint64_t)byteArray[4]) << 32;
-	result |= ((uint64_t)byteArray[5]) << 40;
-	result |= ((uint64_t)byteArray[6]) << 48;
-	result |= ((uint64_t)byteArray[7]) << 56;
-
-	return result;
-}
-
-uint32_t byteArrayToUnsignedIntLittleEndian(uint8_t byteArray[]) {
-	uint32_t result = 0;
-
-	result |= ((uint32_t)byteArray[3]) << 24;
-	result |= ((uint32_t)byteArray[2]) << 16;
-	result |= ((uint32_t)byteArray[1]) << 8;
-	result |= byteArray[0];
-
-	return result;
-}
-*/
-
 void printBytes(const uint8_t *bytes, size_t length)
 {
 	for (size_t i = 0; i < length; i++)
 	{
 		printf("%02x", bytes[i]);
 	}
-	// printf("\n");
 }
 
 void print_binary(const uint8_t *byte_array, size_t array_size, int b)
@@ -589,25 +486,6 @@ off_t byteArrayToUnsignedIntBigEndian(const uint8_t *byteArray, int b)
 	return result;
 }
 
-/*off_t byteArrayToUnsignedIntLittleEndian(const uint8_t *byteArray, int b) {
-	off_t result = 0;
-
-	size_t byteIndex = b / 8; // Determine the byte index
-	size_t bitOffset = b % 8; // Determine the bit offset within the byte
-
-	// Extract the bits from the byte array in little-endian format
-	for (size_t i = 0; i < byteIndex; ++i) {
-		result |= (uint32_t)byteArray[i] << (i * 8);
-	}
-
-	// Extract the remaining bits
-	if (bitOffset > 0) {
-		result |= (uint32_t)(byteArray[byteIndex] >> bitOffset);
-	}
-
-	return result;
-}*/
-
 off_t binaryByteArrayToULL(const uint8_t *byteArray, size_t array_size, int b)
 {
 	if (DEBUG)
@@ -625,34 +503,23 @@ off_t binaryByteArrayToULL(const uint8_t *byteArray, size_t array_size, int b)
 	}
 	if (DEBUG)
 		printf("binaryByteArrayToULL(): result=%ld\n", result);
+	printf("binaryByteArrayToULL(): result=%ld, prefix_size=%d\n", result, b);
 	return result;
 }
 
 off_t getBucketIndex(const uint8_t *byteArray, int b)
 {
-	// printf("getBucketIndex(): ");
-	// printBytes(byteArray,HASH_SIZE);
-
 	off_t result = 0;
-	// littleEndian = false;
-	// if (littleEndian)
-	//	result = byteArrayToUnsignedIntLittleEndian(byteArray,b);
-	// else
-	// result = byteArrayToUnsignedIntBigEndian(byteArray,b);
 	result = binaryByteArrayToULL(byteArray, HASH_SIZE, b);
 	if (DEBUG)
 		printf("getBucketIndex(): %ld %d\n", result, b);
 
-	// printf(" : %lld\n",result);
+	printf("bucket index: %ld\n", result);
 	return result;
 }
 
 off_t getBucketIndex_old(const uint8_t *hash, int num_bits)
 {
-
-	// printf("getBucketIndex(): ");
-	// printBytes(hash,HASH_SIZE);
-
 	off_t index = 0;
 	int shift_bits = 0;
 
@@ -806,9 +673,10 @@ int binarySearch(const uint8_t *targetHash, size_t targetLength, int fileDescrip
 	// should use filesize to determine left and right
 	//  Calculate the bucket index based on the first 2-byte prefix
 	off_t bucketIndex = getBucketIndex(targetHash, PREFIX_SIZE);
-	// int bucketIndex = (targetHash[0] << 8) | targetHash[1];
 	if (DEBUG)
 		printf("bucketIndex=%ld\n", bucketIndex);
+
+	printf("bucketIndex=%ld\n", bucketIndex);
 
 	// filesize
 	long long FILESIZE = filesize;
@@ -871,7 +739,6 @@ int binarySearch(const uint8_t *targetHash, size_t targetLength, int fileDescrip
 		}
 
 		// Compare the target hash with the hash read from file
-
 		if (DEBUG)
 		{
 			printf("memcmp(targetHash)=");
@@ -1540,8 +1407,6 @@ int main(int argc, char *argv[])
 			if (benchmark == false)
 				if (DEBUG)
 					printf("memory_size=%lld MB\n", memory_size);
-			// HASHGEN_THREADS_BUFFER = min(memory_size*8*1024, 8*1024*1024)/ RECORD_SIZE;
-			// printf("HASHGEN_THREADS_BUFFER=%d B\n", HASHGEN_THREADS_BUFFER);
 			break;
 		case 'f':
 			FILENAME = optarg;
@@ -2196,12 +2061,12 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 			// Print the target hash
-			// printf("Target Hash %zu: ", searchNum + 1);
-			// for (size_t i = 0; i < HASH_SIZE; ++i)
-			// {
-			// 	printf("%02x", targetHash[i]); // Print each byte in hexadecimal
-			// }
-			// printf("\n");
+			printf("Target Hash %zu: ", searchNum + 1);
+			for (size_t i = 0; i < HASH_SIZE; ++i)
+			{
+				printf("%02x", targetHash[i]); // Print each byte in hexadecimal
+			}
+			printf("\n");
 
 			// Perform binary search
 			int index = binarySearch(targetHash, prefixLength, fd, filesize, &seekCount, true);
@@ -2428,8 +2293,6 @@ int main(int argc, char *argv[])
 
 			resetTimer(&timer);
 
-			// Array to hold the generated random records
-			// MemoRecord record;
 			// Allocate memory for the array of Bucket structs
 			Bucket *buckets = malloc(NUM_BUCKETS * sizeof(Bucket));
 			if (buckets == NULL)
@@ -2437,8 +2300,6 @@ int main(int argc, char *argv[])
 				printf("2: Error allocating memory: %lu\n", NUM_BUCKETS * sizeof(Bucket));
 				return 1;
 			}
-			// printf("2: XXX allocating memory: %lu %d %lu\n",NUM_BUCKETS* sizeof(Bucket),NUM_BUCKETS,sizeof(Bucket));
-			// exit(0);
 
 			// Initialize each bucket
 			for (int i = 0; i < NUM_BUCKETS; ++i)
@@ -2455,7 +2316,6 @@ int main(int argc, char *argv[])
 				{
 					printf("3 Error allocating memory %lu; %d %d\n", BUCKET_SIZE * sizeof(MemoRecord), NUM_BUCKETS, i);
 
-					// printf("3 Error allocating memory %lu; %lu %d\n",BUCKET_SIZE ,NUM_BUCKETS,i);
 					//  Free previously allocated memory
 					for (int j = 0; j < i; ++j)
 					{
@@ -2500,7 +2360,6 @@ int main(int argc, char *argv[])
 
 			if (CIRCULAR_ARRAY == true)
 			{
-
 				if (benchmark == false)
 					if (DEBUG)
 						printf("Create hash generation threads...\n");
@@ -2515,22 +2374,14 @@ int main(int argc, char *argv[])
 				unsigned long long totalFlushes = 0;
 
 				// Measure time taken for hash generation using gettimeofday
-				// struct timeval start_time, end_time, last_progress_time;
-				// gettimeofday(&start_time, NULL);
-				// gettimeofday(&last_progress_time, NULL);
 				last_progress_i = 0;
-				// double elapsed_time = 0.0;
 
 				elapsedTime = getTimer(&timer);
 				last_progress_update = elapsedTime;
 
-				// Start timing
-				// clock_t start = clock();
-
 				// Write random records to buckets based on their first 2-byte prefix
 				unsigned long long i = 0;
 				int flushedBucketsNeeded = NUM_BUCKETS;
-				// MemoRecord consumedArray[BATCH_SIZE];
 				MemoRecord *consumedArray;
 				consumedArray = malloc(BATCH_SIZE * sizeof(MemoRecord));
 
@@ -2540,9 +2391,7 @@ int main(int argc, char *argv[])
 					printf("flushedBucketsNeeded=%d\n", flushedBucketsNeeded);
 
 				while (flushedBucketsNeeded > 0)
-				// for (unsigned long long i = 0; i < NUM_ENTRIES; i++)
 				{
-
 					if (DEBUG)
 						printf("removeBatch()...\n");
 					removeBatch(&circularArray, consumedArray);
@@ -2551,20 +2400,12 @@ int main(int argc, char *argv[])
 						printf("processing batch of size %ld...\n", BATCH_SIZE);
 					for (size_t b = 0; b < BATCH_SIZE; b++)
 					{
-						// Generate a random record
-						// generateBlake3(&record, i + 1);
-
-						// Calculate the bucket index based on the first 2-byte prefix
-						// int bucketIndex = (record.hash[0] << 8) | record.hash[1];
-
 						off_t bucketIndex = getBucketIndex(consumedArray[b].hash, PREFIX_SIZE);
-						// printf("bucketIndex=%lld\n",bucketIndex);
 
 						// Add the random record to the corresponding bucket
 						Bucket *bucket = &buckets[bucketIndex];
 						if (bucket->count < (size_t)(WRITE_SIZE / RECORD_SIZE))
 						{
-							// printf("bucket->count*RECORD_SIZE=%zu WRITE_SIZE=%lld\n",bucket->count*RECORD_SIZE,WRITE_SIZE);
 							bucket->records[bucket->count++] = consumedArray[b];
 						}
 						else
@@ -2576,25 +2417,12 @@ int main(int argc, char *argv[])
 								// if all buckets fit in memory, sort them now before writing to disk
 								if (FLUSH_SIZE == 1)
 								{
-									// Sort the bucket contents
-									// if (DEBUG)
-									//	printf("sorting bucket before flush %d...\n",b);
-
-									// if (HASHSORT)
-									//	qsort(bucket->records, BUCKET_SIZE, sizeof(MemoRecord), compareMemoRecords);
-
-									// printf("writeBucketToDisk(): bucketIndex=%lld\n",bucketIndex);
-									// writeBucketToDisk(bucket, fd, bucketIndex);
-
 									// Allocate memory for thread arguments
-
 									argsArray[threadCount] = malloc(sizeof(ThreadSortArgs));
-									// ThreadSortArgs *args = malloc(sizeof(ThreadSortArgs));
 									argsArray[threadCount]->records = bucket->records;
 									argsArray[threadCount]->size = BUCKET_SIZE;
 									argsArray[threadCount]->bucket = bucket;
 									argsArray[threadCount]->bucketIndex = bucketIndex;
-									// argsArray[threadCount] = args;
 
 									// Create a new thread for sorting
 									if (pthread_create(&threads_sort[threadCount], NULL, sortBucket, (void *)argsArray[threadCount]) != 0)
@@ -2619,7 +2447,6 @@ int main(int argc, char *argv[])
 											if (DEBUG)
 												printf("writing bucket to disk at index %lu...\n", argsArray[i]->bucketIndex);
 											writeBucketToDisk(argsArray[i]->bucket, fd, argsArray[i]->bucketIndex);
-											// free(argsArray[i]);
 										}
 										if (DEBUG)
 											printf("finished sorting and writing %d buckets, reseting to do it again...\n", num_threads_sort);
@@ -2628,7 +2455,6 @@ int main(int argc, char *argv[])
 								}
 								else
 								{
-									// printf("writeBucketToDisk(): bucketIndex=%lld\n",bucketIndex);
 									writeBucketToDisk(bucket, fd, bucketIndex);
 
 									// Reset the bucket count
@@ -2644,10 +2470,7 @@ int main(int argc, char *argv[])
 						}
 					}
 
-					// gettimeofday(&end_time, NULL);
 					elapsedTime = getTimer(&timer);
-					// elapsed_time = (end_time.tv_sec - start_time.tv_sec) +
-					//                       (end_time.tv_usec - start_time.tv_usec) / 1.0e6;
 
 					if (elapsedTime > last_progress_update + 1.0)
 					{
@@ -2664,13 +2487,8 @@ int main(int argc, char *argv[])
 						last_progress_i = i;
 						// gettimeofday(&last_progress_time, NULL);
 					}
-					// i++;
 					i += BATCH_SIZE;
 				}
-
-				// gettimeofday(&end_time, NULL);
-				//         double elapsed_time_hashgen = (end_time.tv_sec - start_time.tv_sec) +
-				//                               (end_time.tv_usec - start_time.tv_usec) / 1.0e6;
 
 				if (DEBUG)
 					printf("finished generating %llu hashes and wrote them to disk using %llu flushes...\n", i, totalFlushes);
@@ -2739,11 +2557,7 @@ int main(int argc, char *argv[])
 
 		if (FLUSH_SIZE > 1 && doSort && HASHSORT)
 		{
-			// double reading_time, sorting_time, writing_time, total_time;
-			// struct timeval start_time, end_time, start_all, end_all;
-			// long long elapsed;
 			int EXPECTED_BUCKETS_SORTED = NUM_BUCKETS;
-			// gettimeofday(&start_all, NULL);
 			if (DEBUG)
 				printf("external sort started, expecting %llu flushes for %d buckets...\n", FLUSH_SIZE, NUM_BUCKETS);
 
@@ -2756,7 +2570,6 @@ int main(int argc, char *argv[])
 			}
 
 			// Allocate memory for num_threads_sort bucket
-			// Bucket bucket;
 			if (DEBUG)
 				printf("trying to allocate 1: %lu bytes memory...\n", num_threads_sort * sizeof(Bucket));
 			Bucket *buckets = malloc(num_threads_sort * sizeof(Bucket));
@@ -2816,9 +2629,6 @@ int main(int argc, char *argv[])
 			// not sure why i < NUM_BUCKETS-1 is needed
 			// need to break up buckets into smaller pieces
 			// Initialize the semaphore with the maximum number of threads allowed
-			// sem_init(&semaphore_io, 0, num_threads_io);
-			// Create a named semaphore
-			// semaphore_io = sem_open("/my_semaphore", O_CREAT, 0644, num_threads_io);
 			if (DEBUG)
 				printf("before semaphore...\n");
 			semaphore_init(&semaphore_io, num_threads_io);
@@ -2844,10 +2654,6 @@ int main(int argc, char *argv[])
 					printf("starting reading threads...\n");
 				for (int b = 0; b < num_threads_sort; b++)
 				{
-
-					// start threads to sort
-					//  Create threads
-					//  for (int i = 0; i < NUM_THREADS; ++i) {
 					args[b].buckets = buckets;
 					args[b].threadID = b; // Assigning a sample value to 'test'
 					args[b].num_buckets_to_process = num_threads_sort;
@@ -2888,10 +2694,6 @@ int main(int argc, char *argv[])
 					printf("starting sort threads...\n");
 				for (int b = 0; b < num_threads_sort; b++)
 				{
-
-					// start threads to sort
-					//  Create threads
-					//  for (int i = 0; i < NUM_THREADS; ++i) {
 					args[b].buckets = buckets;
 					args[b].threadID = b; // Assigning a sample value to 'test'
 					args[b].num_buckets_to_process = num_threads_sort;
@@ -2933,10 +2735,6 @@ int main(int argc, char *argv[])
 					printf("starting writing threads...\n");
 				for (int b = 0; b < num_threads_sort; b++)
 				{
-
-					// start threads to sort
-					//  Create threads
-					//  for (int i = 0; i < NUM_THREADS; ++i) {
 					args[b].buckets = buckets;
 					args[b].threadID = b; // Assigning a sample value to 'test'
 					args[b].num_buckets_to_process = num_threads_sort;
@@ -2974,46 +2772,27 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				// gettimeofday(&end_time, NULL);
-				// elapsed = (end_time.tv_sec - start_time.tv_sec) * 1000000LL +
-				//                      (end_time.tv_usec - start_time.tv_usec);
-
 				elapsedTime = getTimer(&timer);
 
 				if (elapsedTime > last_progress_update + 1)
 				{
-					// double elapsed_time_since_last_progress_update = elapsedTime - last_progress_update;
-
-					int totalBucketsSorted = i; // i*NUM_THREADS;
+					int totalBucketsSorted = i;
 					float perc_done = totalBucketsSorted * 100.0 / EXPECTED_BUCKETS_SORTED;
 					float eta = (elapsedTime - sort_start) / (perc_done / 100.0) - (elapsedTime - sort_start);
-					// float diskSize = NUM_BUCKETS * BUCKET_SIZE * FLUSH_SIZE * sizeof(MemoRecord) / (1024 * 1024);
-					// float diskSize = FILESIZE_byte / (1024 * 1024);
-					// float throughput_MB = diskSize * perc_done * 1.0 / 100.0 / (elapsedTime - sort_start);
 					float throughput_MB_latest = (((i - last_progress_i) * BUCKET_SIZE * sizeof(MemoRecord) * 1.0) / (elapsedTime - last_progress_update)) / (1024 * 1024);
 					if (DEBUG)
 						printf("%llu %llu %d %llu %lu %f %f\n", i, last_progress_i, BUCKET_SIZE, FLUSH_SIZE, sizeof(MemoRecord), elapsedTime, last_progress_update);
 					float progress = perc_done;
-					// double elapsed_time = elapsed;
 					float remaining_time = eta;
-					// printf("Buckets sorted : %d in %lld sec %.2f%% ETA %lf sec => %.2f MB/sec\n", i*NUM_THREADS, elapsed, perc_done, eta, throughput_MB);
 					if (benchmark == false)
 						printf("[%.0lf][SORT]: %.2lf%% completed, ETA %.1lf seconds, %llu/%d flushes, %.1lf MB/sec\n", elapsedTime, progress, remaining_time, i, NUM_BUCKETS, throughput_MB_latest);
 
 					last_progress_i = i;
 
 					last_progress_update = elapsedTime;
-
-					// gettimeofday(&last_progress_time, NULL);
-					// printf("Buckets sorted : %zu\n", i*NUM_THREADS);
 				}
 			}
 			// end of for loop
-
-			// Destroy the semaphore
-			// sem_unlink("/my_semaphore");
-			// Destroy the semaphore
-			// sem_destroy(&semaphore_io);
 
 			// Destroy the semaphore
 			pthread_mutex_destroy(&semaphore_io.mutex);
@@ -3026,8 +2805,6 @@ int main(int argc, char *argv[])
 				free(buckets[i].records);
 			}
 			free(buckets); // Free the memory allocated for the array of buckets
-
-			// free(bucket.records);
 		}
 		else
 		{
@@ -3044,8 +2821,6 @@ int main(int argc, char *argv[])
 		// maybe enable, doesn't seem to be needed
 		// Flush data to disk
 		if (benchmark == false)
-			// printf("flushing all writes to disk...\n");
-
 			printf("[%.0lf][FLUSH]: 0.00%% completed, ETA 0.0 seconds, 0/0 flushes, 0.0 MB/sec\n", elapsedTime);
 
 		if (fsync(fd) == -1)
@@ -3073,20 +2848,6 @@ int main(int argc, char *argv[])
 
 		elapsedTimeCompress = elapsedTime - elapsedTimeHashGen - elapsedTimeSort - elapsedTimeSync;
 
-		// End timing
-		// clock_t end = clock();
-		// gettimeofday(&end_all_walltime, NULL);
-
-		// double elapsed_walltime = (end_all_walltime.tv_sec - start_all_walltime.tv_sec) +
-		//                               (end_all_walltime.tv_usec - start_all_walltime.tv_usec) / 1.0e6;
-
-		// long long elapsed_walltime = (end_all_walltime.tv_sec - start_all_walltime.tv_sec) * 1000000LL +
-		//                          (end_all_walltime.tv_usec - start_all_walltime.tv_usec);
-		// double elapsed_walltime = elapsed_time+elapsed_time_hashgen;
-
-		// Calculate elapsed time in seconds
-		// double elapsed_seconds = (double)(end - start) / CLOCKS_PER_SEC;
-
 		int record_size = 0;
 		if (FILENAME_FINAL == NULL)
 		{
@@ -3104,7 +2865,6 @@ int main(int argc, char *argv[])
 		long long FILESIZE_FINAL = record_size * NUM_ENTRIES / (1024 * 1024);
 
 		// Calculate bytes per second
-		// double bytes_per_second = sizeof(MemoRecord) * NUM_ENTRIES / elapsedTime;
 		double bytes_per_second = record_size * NUM_ENTRIES / elapsedTime;
 
 		if (benchmark == false)
@@ -3113,8 +2873,6 @@ int main(int argc, char *argv[])
 		// printf("Completed %lld MB vault %s in %.2lf seconds : %.2f MH/s %.2f MB/s\n", FILESIZE_FINAL, FILENAME_FINAL, elapsedTime, hashes_per_second/1000000.0, bytes_per_second*1.0/(1024*1024));
 		else
 			printf("%.3lf,%.3lf,%.3lf,%.3lf,%.3lf\n", elapsedTimeHashGen, elapsedTimeSort, elapsedTimeSync, elapsedTimeCompress, elapsedTime);
-		// printf("MH/s: %.2f\n", );
-		// printf("MB/s: %.2f\n", );
 
 		return 0;
 	}
