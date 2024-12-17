@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DISK=/dev/nvme4n1
+DISK=/dev/nvme0n1
 
 # Synchronize filesystem buffers
 sudo sync
