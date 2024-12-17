@@ -1,6 +1,6 @@
 #!/bin/bash
 
-output_file="data/opi5/param_C0.csv"
+output_file="data/epycbox/param-C0-HDD.csv"
 hash_threads=8
 sort_threads=8
 io_threads=1
@@ -44,6 +44,7 @@ do
 
         ./drop-all-caches.sh
         output=$(./vault -t $hash_threads -o $sort_threads -i $i -m $ram -k $k -f vault$k.memo -w true)
+
         echo "$hash_threads,$sort_threads,$i,$ram,$output" >> $output_file
 done
 
@@ -55,5 +56,6 @@ do
 
         ./drop-all-caches.sh
         output=$(./vault -t $hash_threads -o $sort_threads -i $io_threads -m $r -k $k -f vault$k.memo -w true)
+
         echo "$hash_threads,$sort_threads,$io_threads,$r,$output" >> $output_file
 done
