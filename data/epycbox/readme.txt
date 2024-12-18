@@ -4,8 +4,7 @@ data-l/varvara/vault
 
 log-C0-HDD.txt
 data-l/varvara/vault
-./vault -t 8 -o 128 -i 1 -m 262144 -k $k -f vault$k.memo -w true
+./vault -t 8 -o 64 -i 1 -m 262144 -k $k -f vault$k.memo -w true
 
 log-C0-NVME.txt
-data-fast/varvara/vault
-./vault -t 8 -o 128 -i 8 -m 262144 -k $k -f vault$k.memo -w true
+the data was collected by Prof. Raicu 
