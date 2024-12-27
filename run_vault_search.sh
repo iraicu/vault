@@ -11,10 +11,31 @@ OFFSET=64
 HASH_SIZES=(3 4 5 6 7 8 16 32)
 MEMO_PREFIX="vault"
 
+
+# Check for user argument (HDD or NVME)
+if [ -z "$1" ]; then
+    echo "Usage: $0 <HDD|NVME>"
+    exit 1
+fi
+
+DISK_TYPE=$1
+
+# Set IO_THREADS and CSV_FILE based on the disk type
+if [ "$DISK_TYPE" == "HDD" ]; then
+    IO_THREADS=1
+    CSV_FILE="search-HDD.csv"
+elif [ "$DISK_TYPE" == "NVME" ]; then
+    IO_THREADS=8
+    CSV_FILE="search-NVMe.csv"
+else
+    echo "Invalid disk type. Use 'HDD' or 'NVME'."
+    exit 1
+fi
+
 # Machine-specific configurations
 case $(hostname) in
     "epycbox")
-        CSV_FILE="search_epycbox.csv"
+        OUTPUT_DIR="data/epycbox.csv"
         MAKE_TARGET="vault_x86"
         RAM=262144
         HASH_THREADS=8
@@ -22,7 +43,7 @@ case $(hostname) in
         MEMO_PREFIX="vault"
         ;;
     "orangepi5plus")
-        CSV_FILE="search_opi.csv"
+        CSV_FILE="data/opi.csv"
         MAKE_TARGET="vault_arm"
         RAM=4096
         HASH_THREADS=4
@@ -33,6 +54,9 @@ case $(hostname) in
         echo "Unknown machine. Using default configuration."
         ;;
 esac
+
+# Final CSV file path
+CSV_FILE="$OUTPUT_DIR/$CSV_FILE"
 
 # Create output file and write header
 echo "K,Hash_Size,Average_Lookup_Time_ms" > $CSV_FILE
@@ -48,7 +72,7 @@ run_tests() {
 
     for K in $(seq $k_start $k_end)
     do
-        ./vault -t $HASH_THREADS -o $SORT_THREADS -i 1 -m $RAM -k $K -f ${MEMO_PREFIX}$K.memo
+        ./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -m $RAM -k $K -f ${MEMO_PREFIX}$K.memo
 
         for hash_size in "${HASH_SIZES[@]}"
         do

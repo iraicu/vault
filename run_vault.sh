@@ -19,18 +19,18 @@ fi
 
 DISK_TYPE=$1
 
-
 # Set IO_THREADS and OUTPUT_FILE based on the disk type
 if [ "$DISK_TYPE" == "HDD" ]; then
     IO_THREADS=1
-    OUTPUT_FILE="log-C0-HDD.txt"
+    OUTPUT_FILE="log-C0-HDD.csv"
 elif [ "$DISK_TYPE" == "NVME" ]; then
     IO_THREADS=8
-    OUTPUT_FILE="log-C0-NVMe.txt"
+    OUTPUT_FILE="log-C0-NVMe.csv"
 else
     echo "Invalid disk type. Use 'HDD' or 'NVME'."
     exit 1
 fi
+
 
 # Machine-specific configurations
 case $(hostname) in
