@@ -13,7 +13,7 @@ echo "Hash_threads,Sort_threads,IO_threads,RAM,HASH,SORT,FLUSH,COMPRESS,TOTAL" >
 make clean
 make vault_x86 NONCE_SIZE=4 RECORD_SIZE=32
 
-for t in 4 8 16 32 64
+for t in 2 4 8 16 32 64
 do
 	if [ $t -gt $max_threads ]; then
 		break
