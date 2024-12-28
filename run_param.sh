@@ -1,19 +1,19 @@
 #!/bin/bash
 
 output_file="data/epycbox/param-C0-HDD.csv"
-hash_threads=8
-sort_threads=8
+hash_threads=64
+sort_threads=64
 io_threads=1
-max_threads=8
-ram=16384
+max_threads=64
+ram=262144
 k=32
 
 echo "Hash_threads,Sort_threads,IO_threads,RAM,HASH,SORT,FLUSH,COMPRESS,TOTAL" > $output_file
 
 make clean
-make vault_arm NONCE_SIZE=4 RECORD_SIZE=32
+make vault_x86 NONCE_SIZE=4 RECORD_SIZE=32
 
-for t in 2 4 8 16 32 64
+for t in 4 8 16 32 64
 do
 	if [ $t -gt $max_threads ]; then
 		break
