@@ -499,7 +499,6 @@ off_t binaryByteArrayToULL(const uint8_t *byteArray, size_t array_size, int b)
 	}
 	if (DEBUG)
 		printf("binaryByteArrayToULL(): result=%ld\n", result);
-	printf("binaryByteArrayToULL(): result=%ld, prefix_size=%d\n", result, b);
 	return result;
 }
 
@@ -510,7 +509,6 @@ off_t getBucketIndex(const uint8_t *byteArray, int b)
 	if (DEBUG)
 		printf("getBucketIndex(): %ld %d\n", result, b);
 
-	printf("bucket index: %ld\n", result);
 	return result;
 }
 
