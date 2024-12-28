@@ -80,8 +80,6 @@ int compareMemoRecords(const void *a, const void *b)
 
 struct CircularArray
 {
-	// unsigned char array[HASHGEN_THREADS_BUFFER][HASH_SIZE];
-	// MemoRecord array[HASHGEN_THREADS_BUFFER];
 	MemoRecord *array;
 	size_t head;
 	size_t tail;
@@ -192,7 +190,6 @@ void *arrayGenerationThread(void *arg)
 
 	if (CIRCULAR_ARRAY == true)
 	{
-
 		// int hashObjectSize = sizeof(MemoRecord);
 		// unsigned char batch[BATCH_SIZE][HASH_SIZE];
 		// should batch be dynamically allocated?
@@ -205,7 +202,6 @@ void *arrayGenerationThread(void *arg)
 		{
 			if (DEBUG)
 				printf("arrayGenerationThread(), inside while loop %llu...\n", i);
-			// for (unsigned int i = 0; i < NUM_HASHES_PER_THREAD; i += BATCH_SIZE) {
 			for (size_t j = 0; j < BATCH_SIZE; j++)
 			{
 				if (DEBUG)
@@ -503,7 +499,6 @@ off_t binaryByteArrayToULL(const uint8_t *byteArray, size_t array_size, int b)
 	}
 	if (DEBUG)
 		printf("binaryByteArrayToULL(): result=%ld\n", result);
-	printf("binaryByteArrayToULL(): result=%ld, prefix_size=%d\n", result, b);
 	return result;
 }
 
@@ -514,7 +509,6 @@ off_t getBucketIndex(const uint8_t *byteArray, int b)
 	if (DEBUG)
 		printf("getBucketIndex(): %ld %d\n", result, b);
 
-	printf("bucket index: %ld\n", result);
 	return result;
 }
 
@@ -2283,7 +2277,6 @@ int main(int argc, char *argv[])
 					printf("hash generation and sorting...\n");
 
 			// Open file for writing
-			// int fd = open(FILENAME, O_RDWR | O_CREAT | O_TRUNC | O_DIRECT, 0644);
 			fd = open(FILENAME, O_RDWR | O_CREAT | O_TRUNC, 0644);
 			if (fd < 0)
 			{
@@ -2335,7 +2328,7 @@ int main(int argc, char *argv[])
 			struct CircularArray circularArray;
 			if (CIRCULAR_ARRAY == true)
 				initCircularArray(&circularArray);
-
+	
 			if (benchmark == false)
 				if (DEBUG)
 					printf("Create thread data structure...\n");

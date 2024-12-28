@@ -1,42 +1,100 @@
 #!/bin/bash
 
-csv_file="search_opi.csv"
-echo "K,Hash_Size,Average_Lookup_Time_ms" > $csv_file
+# Unified script for vault search tests
 
-make clean
-make vault_arm NONCE_SIZE=4
-for K in {25..32}
-do
-	for hash_size in 3 4 5 6 7 8 16 32
-	do
-		./drop-all-caches.sh
-    		output=$(./vault -f vaultx$K.memo -k $K -c 100  -l $hash_size)
+# Default values
+CSV_FILE="search.csv"
+MAKE_TARGET="vault_x86"
+RAM=262144
+THREADS=8
+OFFSET=64
+HASH_SIZES=(3 4 5 6 7 8 16 32)
+MEMO_PREFIX="vault"
 
-                avg_time=$(echo "$output" | grep -oP 'Time taken: \K\d+\.\d+(?= ms per lookup)')
 
-		if [ -n "$avg_time" ]; then
-            		echo "$K,$hash_size,$avg_time" >> $csv_file
-        	else
-            		echo "Error: Could not extract time for K=$K, Hash_Size=$hash_size" >&2
-        	fi
-	done
-done
+# Check for user argument (HDD or NVME)
+if [ -z "$1" ]; then
+    echo "Usage: $0 <HDD|NVME>"
+    exit 1
+fi
 
-make clean
-make vault_arm NONCE_SIZE=5
-for K in {33..35}
-do
-	for hash_size in 3 4 5 6 7 8 16 32
-	do
-    		./drop-all-caches.sh
-		 output=$(./vault -k $K -f vaultx$K.memo -c 100 -l $hash_size)
+DISK_TYPE=$1
 
-		avg_time=$(echo "$output" | grep -oP 'Time taken: \K\d+\.\d+(?= ms per lookup)')
+# Set IO_THREADS and CSV_FILE based on the disk type
+if [ "$DISK_TYPE" == "HDD" ]; then
+    IO_THREADS=1
+    CSV_FILE="search-HDD.csv"
+elif [ "$DISK_TYPE" == "NVME" ]; then
+    IO_THREADS=8
+    CSV_FILE="search-NVMe.csv"
+else
+    echo "Invalid disk type. Use 'HDD' or 'NVME'."
+    exit 1
+fi
 
-		if [ -n "$avg_time" ]; then
-			echo "$K,$hash_size,$avg_time" >> $csv_file
-		else
-			echo "Error: Could not extract time for K=$K, Hash_Size=$hash_size" >&2
-		fi
-	done
-done
+# Machine-specific configurations
+case $(hostname) in
+    "epycbox")
+        OUTPUT_DIR="data/epycbox.csv"
+        MAKE_TARGET="vault_x86"
+        RAM=262144
+        HASH_THREADS=8
+        SORT_THREADS=64
+        MEMO_PREFIX="vault"
+        ;;
+    "orangepi5plus")
+        CSV_FILE="data/opi.csv"
+        MAKE_TARGET="vault_arm"
+        RAM=4096
+        HASH_THREADS=4
+        SORT_THREADS=4
+        MEMO_PREFIX="vaultx"
+        ;;
+    *)
+        echo "Unknown machine. Using default configuration."
+        ;;
+esac
+
+# Final CSV file path
+CSV_FILE="$OUTPUT_DIR/$CSV_FILE"
+
+# Create output file and write header
+echo "K,Hash_Size,Average_Lookup_Time_ms" > $CSV_FILE
+
+# Function to run tests
+run_tests() {
+    local nonce_size=$1
+    local k_start=$2
+    local k_end=$3
+
+    make clean
+    make $MAKE_TARGET NONCE_SIZE=$nonce_size
+
+    for K in $(seq $k_start $k_end)
+    do
+        ./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -m $RAM -k $K -f ${MEMO_PREFIX}$K.memo
+
+        for hash_size in "${HASH_SIZES[@]}"
+        do
+            ./drop-all-caches.sh
+            output=$(./vault -f ${MEMO_PREFIX}$K.memo -k $K -c 100 -l $hash_size)
+
+            avg_time=$(echo "$output" | grep -oP 'Time taken: \K\d+\.\d+(?= ms per lookup)')
+
+            if [ -n "$avg_time" ]; then
+                echo "$K,$hash_size,$avg_time" >> $CSV_FILE
+            else
+                echo "Error: Could not extract time for K=$K, Hash_Size=$hash_size" >&2
+            fi
+        done
+    done
+}
+
+# Run tests for NONCE_SIZE=4
+run_tests 4 25 32
+
+# Run tests for NONCE_SIZE=5
+run_tests 5 33 35
+
+echo "Search tests completed. Results saved to $CSV_FILE."
+
