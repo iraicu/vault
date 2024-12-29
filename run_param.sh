@@ -101,7 +101,7 @@ run_tests() {
                 ;;
             "ram")
                 if [ $value -gt $ram ]; then
-                    break
+                    continue
                 fi
                 output=$(./vault -t $hash_threads -o $sort_threads -i $io_threads -m $value -k $k -f vault$k.memo -w true)
                 echo "$hash_threads,$sort_threads,$io_threads,$value,$output" >> $output_file
