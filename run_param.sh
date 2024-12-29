@@ -80,7 +80,7 @@ run_tests() {
 
     for value in $values
     do
-        if [ $value -gt $max_threads ]; then
+        if [ $param_name != "ram" ] && [ $value -gt $max_threads ]; then
             break
         fi
 
@@ -115,9 +115,9 @@ run_tests() {
 }
 
 # Run tests for each parameter
-run_tests "hash_threads" "2 4 8 16 32 64"
-run_tests "sort_threads" "1 2 4 8 16 32 64"
-run_tests "io_threads" "1 2 4 8 16 32 64"
+# run_tests "hash_threads" "2 4 8 16 32 64"
+# run_tests "sort_threads" "1 2 4 8 16 32 64"
+# run_tests "io_threads" "1 2 4 8 16 32 64"
 run_tests "ram" "512 1024 2048 4096 8192 16384 32768 65536 131072 262144"
 
 echo "Parameter tests completed. Results saved to $output_file."
