@@ -108,7 +108,7 @@ run_tests() {
                 fi
                 output=$(./vault -t $hash_threads -o $sort_threads -i $io_threads -m $value -k $k -f vault$k.memo -w true)
                 echo "$hash_threads,$sort_threads,$io_threads,$value,$output" >> $output_file
-		rm vault$k.memo
+		        rm vault$k.memo
                 ;;
         esac
     done
