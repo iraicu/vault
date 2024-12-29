@@ -90,14 +90,17 @@ run_tests() {
             "hash_threads")
                 output=$(./vault -t $value -o $sort_threads -i $io_threads -m $ram -k $k -f vault$k.memo -w true)
                 echo "$value,$sort_threads,$io_threads,$ram,$output" >> $output_file
+		rm vault$k.memo
                 ;;
             "sort_threads")
                 output=$(./vault -t $hash_threads -o $value -i $io_threads -m $ram -k $k -f vault$k.memo -w true)
                 echo "$hash_threads,$value,$io_threads,$ram,$output" >> $output_file
+		rm vault$k.memo
                 ;;
             "io_threads")
                 output=$(./vault -t $hash_threads -o $sort_threads -i $value -m $ram -k $k -f vault$k.memo -w true)
                 echo "$hash_threads,$sort_threads,$value,$ram,$output" >> $output_file
+		rm vault$k.memo
                 ;;
             "ram")
                 if [ $value -gt $ram ]; then
@@ -105,6 +108,7 @@ run_tests() {
                 fi
                 output=$(./vault -t $hash_threads -o $sort_threads -i $io_threads -m $value -k $k -f vault$k.memo -w true)
                 echo "$hash_threads,$sort_threads,$io_threads,$value,$output" >> $output_file
+		rm vault$k.memo
                 ;;
         esac
     done
