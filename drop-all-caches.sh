@@ -15,6 +15,7 @@ case $(hostname) in
         ;;
     "raspberrypi5")
 	DISK="/dev/sda"
+	;;
     *)
         echo "Unknown machine. Using default disk configuration: $DISK"
         ;;
