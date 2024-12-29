@@ -80,7 +80,7 @@ run_tests() {
 
     for value in $values
     do
-        if [ $value -gt $max_threads ]; then
+        if [ $param_name != "ram" ] && [ $value -gt $max_threads ]; then
             break
         fi
 
@@ -104,7 +104,7 @@ run_tests() {
                 ;;
             "ram")
                 if [ $value -gt $ram ]; then
-                    continue
+                    break
                 fi
                 output=$(./vault -t $hash_threads -o $sort_threads -i $io_threads -m $value -k $k -f vault$k.memo -w true)
                 echo "$hash_threads,$sort_threads,$io_threads,$value,$output" >> $output_file
