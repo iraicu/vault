@@ -82,7 +82,7 @@ run_tests() {
 
         for hash_size in "${HASH_SIZES[@]}"
         do
-            ./drop-all-caches.sh
+            ./drop-all-caches.sh $DISK_TYPE
             output=$(./vault -f ${MEMO_PREFIX}$K.memo -k $K -c 100 -l $hash_size)
 
             avg_time=$(echo "$output" | grep -oP 'Time taken: \K\d+\.\d+(?= ms/lookup)')
@@ -103,4 +103,3 @@ run_tests 4 25 32
 run_tests 5 33 35
 
 echo "Search tests completed. Results saved to $CSV_FILE."
-
