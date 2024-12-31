@@ -84,7 +84,7 @@ run_tests() {
             break
         fi
 
-        ./drop-all-caches.sh
+        ./drop-all-caches.sh $DISK_TYPE
 
         case $param_name in
             "hash_threads")
