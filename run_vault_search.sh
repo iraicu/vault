@@ -23,10 +23,10 @@ DISK_TYPE=$1
 # Set IO_THREADS and CSV_FILE based on the disk type
 if [ "$DISK_TYPE" == "HDD" ]; then
     IO_THREADS=1
-    CSV_FILE="search-HDD.csv"
+    FILENAME="search-HDD.csv"
 elif [ "$DISK_TYPE" == "NVME" ]; then
     IO_THREADS=8
-    CSV_FILE="search-NVMe.csv"
+    FILENAME="search-NVMe.csv"
 else
     echo "Invalid disk type. Use 'HDD' or 'NVME'."
     exit 1
@@ -35,28 +35,34 @@ fi
 # Machine-specific configurations
 case $(hostname) in
     "epycbox")
-        OUTPUT_DIR="data/epycbox.csv"
+        OUTPUT_DIR="data/epycbox"
         MAKE_TARGET="vault_x86"
         RAM=262144
         HASH_THREADS=8
         SORT_THREADS=64
-        MEMO_PREFIX="vault"
         ;;
     "orangepi5plus")
-        CSV_FILE="data/opi.csv"
+       	OUTPUT_DIR="data/opi5"
         MAKE_TARGET="vault_arm"
-        RAM=4096
-        HASH_THREADS=4
-        SORT_THREADS=4
-        MEMO_PREFIX="vaultx"
+        RAM=16384
+        HASH_THREADS=8
+        SORT_THREADS=8
         ;;
+    "raspberrypi5")
+	OUTPUT_DIR="data/rpi5"
+	MAKE_TARGET="vault_arm"
+	RAM=4096
+	HASH_THREADS=4
+	SORT_THREADS=4
+	;;
     *)
         echo "Unknown machine. Using default configuration."
         ;;
 esac
 
 # Final CSV file path
-CSV_FILE="$OUTPUT_DIR/$CSV_FILE"
+CSV_FILE="$OUTPUT_DIR/$FILENAME"
+MEMO_PREFIX="vault"
 
 # Create output file and write header
 echo "K,Hash_Size,Average_Lookup_Time_ms" > $CSV_FILE
@@ -72,14 +78,14 @@ run_tests() {
 
     for K in $(seq $k_start $k_end)
     do
-        ./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -m $RAM -k $K -f ${MEMO_PREFIX}$K.memo
+        ./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -m $RAM -k $K -f ${MEMO_PREFIX}$K.memo -w true
 
         for hash_size in "${HASH_SIZES[@]}"
         do
-            ./drop-all-caches.sh
+            ./drop-all-caches.sh $DISK_TYPE
             output=$(./vault -f ${MEMO_PREFIX}$K.memo -k $K -c 100 -l $hash_size)
 
-            avg_time=$(echo "$output" | grep -oP 'Time taken: \K\d+\.\d+(?= ms per lookup)')
+            avg_time=$(echo "$output" | grep -oP 'Time taken: \K\d+\.\d+(?= ms/lookup)')
 
             if [ -n "$avg_time" ]; then
                 echo "$K,$hash_size,$avg_time" >> $CSV_FILE
@@ -97,4 +103,3 @@ run_tests 4 25 32
 run_tests 5 33 35
 
 echo "Search tests completed. Results saved to $CSV_FILE."
-
