@@ -74,7 +74,7 @@ run_tests() {
     local k_end=$3
 
     make clean
-    make $MAKE_TARGET NONCE_SIZE=$nonce_size
+    make $MAKE_TARGET NONCE_SIZE=$nonce_size RECORD_SIZE=32
 
     for K in $(seq $k_start $k_end)
     do
