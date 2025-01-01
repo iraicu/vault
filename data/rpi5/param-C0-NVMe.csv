@@ -1,0 +1,6 @@
+Hash_threads,Sort_threads,IO_threads,RAM,HASH,SORT,FLUSH,COMPRESS,TOTAL
+4,4,4,512,no valid configuration found... this should never happen
+exiting...
+4,4,4,1024,150.770,427.058,0.775,0.000,578.603
+4,4,4,2048,147.804,460.344,0.754,0.000,608.901
+4,4,4,4096,147.494,493.558,0.534,0.000,641.585
