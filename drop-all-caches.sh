@@ -35,7 +35,7 @@ clear_hdd_cache() {
     sudo sync
     sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
     sudo blockdev --flushbufs "$disk"
-    sudo hdparm -F "$disk"
+    sudo hdparm -F -f "$disk"
 }
 
 # Function to clear NVMe caches
