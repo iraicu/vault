@@ -90,6 +90,9 @@ case $(hostname) in
 
 esac
 
+mkdir $temp_dir
+mkdir $plot_dir
+
 # Set the output file name
 output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
 
@@ -106,10 +109,12 @@ run_test() {
     local buckets=$3
     local stripe=$4
 
+    ./drop-all-caches.sh $DISK_TYPE
+
     start_time=$(date +%s)
     chia plotters chiapos --override-k -k $k -r $threads -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir
     end_time=$(date +%s)
-    
+
     elapsed_time=$((end_time - start_time))
     echo "$threads,$buffer,$buckets,$stripe,$temp_dir,$plot_dir,$elapsed_time" >> $output_file
 }
