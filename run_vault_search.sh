@@ -23,10 +23,10 @@ DISK_TYPE=$1
 # Set IO_THREADS and CSV_FILE based on the disk type
 if [ "$DISK_TYPE" == "HDD" ]; then
     IO_THREADS=1
-    FILENAME="search-HDD.csv"
+    FILENAME="search-C0-HDD.csv"
 elif [ "$DISK_TYPE" == "NVME" ]; then
     IO_THREADS=8
-    FILENAME="search-NVMe.csv"
+    FILENAME="search-C0-NVMe.csv"
 else
     echo "Invalid disk type. Use 'HDD' or 'NVME'."
     exit 1
