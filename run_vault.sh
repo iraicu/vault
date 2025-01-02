@@ -89,9 +89,8 @@ run_tests() {
     for k in $(seq $k_start $k_end)
     do
         $CACHE_DROP_SCRIPT
-        #output=$(./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -f vault$k.memo -m $RAM -k $k -w true)
-	./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -f vault$k.memo -m $RAM -k $k
-        #echo "$k,$RAM,$output" >> $OUTPUT_FILE
+        output=$(./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -f vault$k.memo -m $RAM -k $k -w true)
+        echo "$k,$RAM,$output" >> $OUTPUT_FILE
     done
 }
 
