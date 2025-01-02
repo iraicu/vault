@@ -100,6 +100,6 @@ run_tests() {
 run_tests 4 25 32
 
 # Run tests for NONCE_SIZE=5
-run_tests 5 33 35
+run_tests 5 33 34
 
 echo "Search tests completed. Results saved to $CSV_FILE."
