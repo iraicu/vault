@@ -90,6 +90,9 @@ case $(hostname) in
 
 esac
 
+mkdir $temp_dir
+mkdir $plot_dir
+
 # Set the output file name
 output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
 
@@ -97,7 +100,7 @@ output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
 k=27
 
 # Initialize the log file with headers
-echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Elapsed_Time" > $output_file
+echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time" > $output_file
 
 # Function to run a single test
 run_test() {
@@ -106,19 +109,26 @@ run_test() {
     local buckets=$3
     local stripe=$4
 
-    start_time=$(date +%s)
-    chia plotters chiapos --override-k -k $k -r $threads -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir
-    end_time=$(date +%s)
-    
-    elapsed_time=$((end_time - start_time))
-    echo "$threads,$buffer,$buckets,$stripe,$temp_dir,$plot_dir,$elapsed_time" >> $output_file
+    ./drop-all-caches.sh $DISK_TYPE
+
+    log_file="chia_plot_$threads_$buffer_$buckets_$stripe.log"
+    chia plotters chiapos --override-k -k $k -r $threads -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir > "$log_file" 2>&1
+
+    # Extract times from log
+    phase_1_time=$(grep "Time for phase 1" "$log_file" | awk '{print $6}')
+    phase_2_time=$(grep "Time for phase 2" "$log_file" | awk '{print $6}')
+    phase_3_time=$(grep "Time for phase 3" "$log_file" | awk '{print $6}')
+    phase_4_time=$(grep "Time for phase 4" "$log_file" | awk '{print $6}')
+    total_time=$(grep "Total time" "$log_file" | awk '{print $4}')
+
+    echo "$threads,$buffer,$buckets,$stripe,$temp_dir,$plot_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time" >> $output_file
 }
 
 # Test combinations of all parameters
 for threads in "${threads_list[@]}"; do
     for buffer in "${buffer_range[@]}"; do
         for buckets in "${bucket_range[@]}"; do
-            for stripe in $(seq $stripe_min $stripe_max $((stripe_max/2))); do
+            for stripe in $(seq $stripe_min $stripe_max $((stripe_max / 2))); do
                 echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
                 run_test $threads $buffer $buckets $stripe
             done
