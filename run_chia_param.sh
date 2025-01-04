@@ -91,7 +91,7 @@ mkdir -p $temp_dir
 mkdir -p $plot_dir
 
 # Set the output file name
-output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
+output_file="$output_dir/chia-param-C0-$DISK_TYPE-revised.csv"
 
 # Set the constant k
 k=27
