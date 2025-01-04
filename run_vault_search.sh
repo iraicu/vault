@@ -26,7 +26,7 @@ if [ "$DISK_TYPE" == "HDD" ]; then
     FILENAME="search-C0-HDD.csv"
 elif [ "$DISK_TYPE" == "NVME" ]; then
     IO_THREADS=8
-    FILENAME="2search-C0-NVMe.csv"
+    FILENAME="search-C0-NVMe.csv"
 else
     echo "Invalid disk type. Use 'HDD' or 'NVME'."
     exit 1
@@ -70,14 +70,14 @@ echo "K,Hash_Size,Average_Lookup_Time_ms" > $CSV_FILE
 # Function to run tests
 run_tests() {
     local nonce_size=$1
-    local K=$2
-    #local k_end=$3
+    local k_start=$2
+    local k_end=$3
 
     make clean
     make $MAKE_TARGET NONCE_SIZE=$nonce_size RECORD_SIZE=32
 
-    #for K in $(seq $k_start $k_end)
-    #do
+    for K in $(seq $k_start $k_end)
+    do
         ./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -m $RAM -k $K -f ${MEMO_PREFIX}$K.memo -w true
 
         for hash_size in "${HASH_SIZES[@]}"
@@ -93,13 +93,13 @@ run_tests() {
                 echo "Error: Could not extract time for K=$K, Hash_Size=$hash_size" >&2
             fi
         done
-    #done
+    done
 }
 
 # Run tests for NONCE_SIZE=4
-#run_tests 4 25 32
+run_tests 4 25 32
 
 # Run tests for NONCE_SIZE=5
-run_tests 5 35
+run_tests 5 33 35
 
 echo "Search tests completed. Results saved to $CSV_FILE."
