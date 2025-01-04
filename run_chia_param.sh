@@ -25,9 +25,8 @@ case $(hostname) in
         output_dir="data/epycbox"
         threads_list=(1 2 4 8 16 32 64)
         buffer_range=(512 1024 2048 4096 8192 16384 32768 65536 131072 262144)
-        bucket_range=(16 32 64 128 256 512 1024)
-        stripe_min=32768
-        stripe_max=131072
+        bucket_range=(16 32 64 128)					# Maximumm bucket is 128, minimum is 16
+        stripe_range=(1024 2048 4096 8192 16384 65536 131072 262144)	# No minimum or maximum
         max_threads=64
         ram=262144
         ;;
@@ -47,10 +46,9 @@ case $(hostname) in
         output_dir="data/opi5"
         threads_list=(1 2 4 8)
         buffer_range=(512 1024 2048 4096 8192 16384)
-        bucket_range=(16 32 64 128 256)
-        stripe_min=32768
-        stripe_max=65536
-        max_threads=32
+        bucket_range=(16 32 64 128)
+	stripe_range=(1024 2048 4096 8192 32768 65536 131072 262144)
+        max_threads=8
         ram=16384
         ;;
 
@@ -69,10 +67,9 @@ case $(hostname) in
         output_dir="data/rpi5"
         threads_list=(1 2 4)
         buffer_range=(512 1024 2048 4096)
-        bucket_range=(16 32 64 128 256)
-        stripe_min=16384
-        stripe_max=32768
-        max_threads=16
+        bucket_range=(16 32 64 128)
+        stripe_range=(1024 2048 4096 8192 16384 32768 65536 131072 262144)
+        max_threads=4
         ram=8192
         ;;
 
@@ -82,7 +79,7 @@ case $(hostname) in
         output_dir="data/default"
         threads_list=(4 8 16 32)
         buffer_range=(8192 16384 32768)
-        bucket_range=(16 32 64 128 256)
+        bucket_range=(16 32 64 128)
         stripe_min=32768
         stripe_max=65536
         temp_dir="/mnt/default_temp"
@@ -90,8 +87,8 @@ case $(hostname) in
 
 esac
 
-mkdir $temp_dir
-mkdir $plot_dir
+mkdir -p $temp_dir
+mkdir -p $plot_dir
 
 # Set the output file name
 output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
@@ -128,7 +125,7 @@ run_test() {
 for threads in "${threads_list[@]}"; do
     for buffer in "${buffer_range[@]}"; do
         for buckets in "${bucket_range[@]}"; do
-            for stripe in $(seq $stripe_min $stripe_max $((stripe_max / 2))); do
+            for stripe in "${stripe_range[@]}"; do
                 echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
                 run_test $threads $buffer $buckets $stripe
             done
