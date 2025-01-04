@@ -68,7 +68,7 @@ case $(hostname) in
         threads_list=(1 2 4)
         buffer_range=(512 1024 2048 4096)
         bucket_range=(16 32 64 128)
-        stripe_range=(1024 2048 4096 8192 16384 32768 65536 131072 262144)
+        stripe_range=(1024 2048 4096 8192 32768 65536 131072 262144)
         max_threads=4
         ram=8192
         ;;
