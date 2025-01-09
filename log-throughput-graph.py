@@ -4,7 +4,7 @@ import os
 
 # Directory containing the data files (organized by machine)
 data_dir = "data"  # Change this to the path where your data files are stored
-output_dir = "throughput_graphs"  # Directory to save the throughput graphs
+output_dir = "graphs"  # Directory to save the throughput graphs
 os.makedirs(output_dir, exist_ok=True)
 
 # Function to create throughput bar graph for a single machine
@@ -39,7 +39,7 @@ def create_throughput_graph(data, machine_name):
 
     # Save graph to output directory
     plt.tight_layout()
-    output_path = os.path.join(output_dir, f"{machine_name}_throughput.svg")
+    output_path = os.path.join(output_dir, f"{machine_name}/log-C0-throughput.svg")
     plt.savefig(output_path)
     plt.close()
 

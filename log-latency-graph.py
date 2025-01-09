@@ -37,7 +37,7 @@ def create_bar_graph(data, machine_name):
 
     # Save graph to output directory
     plt.tight_layout()
-    output_path = os.path.join(output_dir, f"{machine_name}.svg")
+    output_path = os.path.join(output_dir, f"{machine_name}/log-C0-latency.svg")
     plt.savefig(output_path)
     plt.close()
 
