@@ -58,6 +58,6 @@ for machine in machines:
 
         # Adjust layout and save the combined plot
         plt.tight_layout()
-        output_file = os.path.join(output_dir, f"{drive_type}_combined.svg")
+        output_file = os.path.join(output_dir, f"param-C0-{drive_type}.svg")
         plt.savefig(output_file)
         plt.close()
