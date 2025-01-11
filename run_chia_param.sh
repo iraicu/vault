@@ -44,10 +44,11 @@ case $(hostname) in
             exit 1
         fi
         output_dir="data/opi5"
-        threads_list=(1 2 4 8)
+        threads_list=(2 4 8)
+	max_memory=16384
         buffer_range=(512 1024 2048 4096 8192 16384)
-        bucket_range=(16 32 64 128)
-	stripe_range=(1024 2048 4096 8192 16384 32768 65536 131072 262144)
+        bucket_range=(64 128)
+	stripe_range=(32768 65536 131072 262144)
         max_threads=8
         ram=16384
         ;;
@@ -91,7 +92,7 @@ mkdir -p $temp_dir
 mkdir -p $plot_dir
 
 # Set the output file name
-output_file="$output_dir/chia-param-C0-$DISK_TYPE-revised.csv"
+output_file="$output_dir/chia-param-C0-$DISK_TYPE-revised2.csv"
 
 # Set the constant k
 k=27
@@ -121,16 +122,35 @@ run_test() {
     echo "$threads,$buffer,$buckets,$stripe,$temp_dir,$plot_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time" >> $output_file
 }
 
-# Test combinations of all parameters
-for threads in "${threads_list[@]}"; do
-    for buffer in "${buffer_range[@]}"; do
+threads=2
+buffer=1024
+buckets=128
+
+# Start the loop
+while [ $threads -le ${threads_list[-1]} ]; do
+    while [ $buffer -le $max_memory ]; do
         for buckets in "${bucket_range[@]}"; do
             for stripe in "${stripe_range[@]}"; do
                 echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
                 run_test $threads $buffer $buckets $stripe
             done
         done
+        buffer=$((buffer * 2))
     done
+    threads=$((threads * 2))
+    buffer=1024
 done
+
+# Test combinations of all parameters
+#for threads in "${threads_list[@]}"; do
+#    for buffer in "${buffer_range[@]}"; do
+#        for buckets in "${bucket_range[@]}"; do
+#            for stripe in "${stripe_range[@]}"; do
+#                echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
+#                run_test $threads $buffer $buckets $stripe
+#            done
+#        done
+#    done
+#done
 
 echo "Parameter sweep completed. Results saved to $output_file."
