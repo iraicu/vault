@@ -247,4 +247,3 @@ Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_
 2,1024,64,65536,/data-fast/varvara/tmp,/data-fast/varvara/plot,612.199,239.751,417.315,31.218,1300.485
 2,1024,64,131072,/data-fast/varvara/tmp,/data-fast/varvara/plot,611.952,247.917,417.369,30.618,1307.858
 2,1024,64,262144,/data-fast/varvara/tmp,/data-fast/varvara/plot,644.014,243.256,415.888,31.118,1334.277
-2,1024,128,1024,/data-fast/varvara/tmp,/data-fast/varvara/plot,,,,,
