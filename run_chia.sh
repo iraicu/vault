@@ -40,7 +40,7 @@ case $MACHINE_NAME in
         fi
         threads=8
         buffer=16384
-        buckets=64
+        buckets=128
         stripe=32768
         ;;
     "raspberrypi5")
@@ -55,9 +55,9 @@ case $MACHINE_NAME in
             exit 1
         fi
         threads=2
-        buffer=8192
-        buckets=32
-        stripe=2048
+        buffer=2048
+        buckets=128
+        stripe=32768
         ;;
     *)
         echo "Unknown machine. Using default configuration."
@@ -73,20 +73,33 @@ esac
 # Ensure directories exist
 mkdir -p "$temp_dir" "$plot_dir"
 
-# Output log directory and CSV file
+# Output directories
 log_dir="./chia_k_logs"
-mkdir -p "$log_dir"
-output_file="./data/${MACHINE_NAME}}/chia-C0-${DISK_TYPE}.csv"
+output_dir="./data/$MACHINE_NAME"
+output_file="$output_dir/chia-C0-${DISK_TYPE}.csv"
+
+# Create directories for logs and output
+mkdir -p "$log_dir" "$output_dir"
 
 # Initialize the CSV file with headers
 echo "k,Temp_Dir,Final_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time,Final_File_Size" > "$output_file"
+
+# Function to clean up files in temp and plot directories
+cleanup_directories() {
+    echo "Cleaning up directories: $temp_dir and $plot_dir..."
+    rm -rf "$temp_dir"/* "$plot_dir"/*
+}
 
 # Function to run chia plotter and extract data
 run_plotter() {
     local k=$1
     local log_file="$log_dir/chia_k${k}_${DISK_TYPE}_$(hostname).log"
 
-    echo "Running chia plotter for k=$k on $(hostname)..."
+    # Drop all caches
+    echo "Dropping all caches using ./drop-all-caches.sh $DISK_TYPE..."
+    ./drop-all-caches.sh "$DISK_TYPE"
+
+    echo "Running chia plotter for k=$k on $MACHINE_NAME..."
     chia plotters chiapos --override-k \
         -k "$k" \
         -r "$threads" \
@@ -110,6 +123,9 @@ run_plotter() {
 
     # Append extracted data to the CSV file
     echo "$k,$tmp_dir,$final_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time,$final_file_size" >> "$output_file"
+
+    # Cleanup directories after plot is created
+    cleanup_directories
 }
 
 # Run chia plotter for k values from 25 to 35
