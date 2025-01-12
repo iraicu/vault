@@ -26,7 +26,7 @@ case $(hostname) in
         threads_list=(1 2 4 8 16 32 64)
         buffer_range=(512 1024 2048 4096 8192 16384 32768 65536 131072 262144)
         bucket_range=(16 32 64 128)					# Maximumm bucket is 128, minimum is 16
-        stripe_range=(1024 2048 4096 8192 16384 65536 131072 262144)	# No minimum or maximum
+        stripe_range=(16384 65536 131072 262144)	# No minimum or maximum
         max_threads=64
         ram=262144
         ;;
@@ -91,7 +91,7 @@ mkdir -p $temp_dir
 mkdir -p $plot_dir
 
 # Set the output file name
-output_file="$output_dir/chia-param-C0-$DISK_TYPE-revised.csv"
+output_file="$output_dir/chia-param-C0-$DISK_TYPE-revised2.csv"
 
 # Set the constant k
 k=27
@@ -101,15 +101,15 @@ echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,
 
 # Function to run a single test
 run_test() {
-    local threads=$1
-    local buffer=$2
-    local buckets=$3
-    local stripe=$4
+    #local threads=$1
+    local buffer=$1
+    local buckets=$2
+    local stripe=$3
 
     ./drop-all-caches.sh $DISK_TYPE
 
     log_file="chia_plot_$threads_$buffer_$buckets_$stripe.log"
-    chia plotters chiapos --override-k -k $k -r $threads -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir > "$log_file" 2>&1
+    chia plotters chiapos --override-k -k $k -r 64 -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir > "$log_file" 2>&1
 
     # Extract times from log
     phase_1_time=$(grep "Time for phase 1" "$log_file" | awk '{print $6}')
@@ -122,15 +122,15 @@ run_test() {
 }
 
 # Test combinations of all parameters
-for threads in "${threads_list[@]}"; do
+#for threads in "${threads_list[@]}"; do
     for buffer in "${buffer_range[@]}"; do
         for buckets in "${bucket_range[@]}"; do
             for stripe in "${stripe_range[@]}"; do
                 echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
-                run_test $threads $buffer $buckets $stripe
+                run_test $buffer $buckets $stripe
             done
         done
     done
-done
+#done
 
 echo "Parameter sweep completed. Results saved to $output_file."
