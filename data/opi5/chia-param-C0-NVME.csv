@@ -247,7 +247,6 @@ Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_
 2,1024,64,65536,/data-fast/varvara/tmp,/data-fast/varvara/plot,612.199,239.751,417.315,31.218,1300.485
 2,1024,64,131072,/data-fast/varvara/tmp,/data-fast/varvara/plot,611.952,247.917,417.369,30.618,1307.858
 2,1024,64,262144,/data-fast/varvara/tmp,/data-fast/varvara/plot,644.014,243.256,415.888,31.118,1334.277
-
 2,1024,64,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,621.908,241.298,418.176,30.544,1311.928
 2,1024,64,65536,/data-fast/varvara/tmp,/data-fast/varvara/plot,610.783,244.379,416.979,31.215,1303.358
 2,1024,64,131072,/data-fast/varvara/tmp,/data-fast/varvara/plot,605.714,243.768,415.873,30.531,1295.888
@@ -364,7 +363,7 @@ Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_
 8,16384,64,65536,/data-fast/varvara/tmp,/data-fast/varvara/plot,385.200,245.239,417.303,30.851,1078.595
 8,16384,64,131072,/data-fast/varvara/tmp,/data-fast/varvara/plot,405.564,242.093,416.421,30.598,1094.678
 8,16384,64,262144,/data-fast/varvara/tmp,/data-fast/varvara/plot,399.189,243.803,416.852,30.474,1090.320
-8,16384,128,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,377.435,233.558,410.843,29.414,1051.252
+        8,16384,128,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,377.435,233.558,410.843,29.414,1051.252---------
 8,16384,128,65536,/data-fast/varvara/tmp,/data-fast/varvara/plot,385.369,235.460,412.410,29.718,1062.959
 8,16384,128,131072,/data-fast/varvara/tmp,/data-fast/varvara/plot,396.167,242.204,410.936,29.611,1078.921
 8,16384,128,262144,/data-fast/varvara/tmp,/data-fast/varvara/plot,450.687,241.964,412.139,29.854,1134.646
