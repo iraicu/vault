@@ -7,10 +7,9 @@ if [ -z "$1" ]; then
 fi
 
 DISK_TYPE=$1
-MACHINE_NAME=$(hostname)
 
 # Machine-specific configurations
-case $MACHINE_NAME in
+case $(hostname) in
     "epycbox")
         if [ "$DISK_TYPE" == "HDD" ]; then
             temp_dir="/data-l/varvara/tmp"
@@ -26,6 +25,7 @@ case $MACHINE_NAME in
         buffer=262144
         buckets=128
         stripe=65536
+        MACHINE_NAME="epycbox"
         ;;
     "orangepi5plus")
         if [ "$DISK_TYPE" == "HDD" ]; then
@@ -42,6 +42,7 @@ case $MACHINE_NAME in
         buffer=16384
         buckets=128
         stripe=32768
+        MACHINE_NAME="opi5"
         ;;
     "raspberrypi5")
         if [ "$DISK_TYPE" == "HDD" ]; then
@@ -58,6 +59,7 @@ case $MACHINE_NAME in
         buffer=2048
         buckets=128
         stripe=32768
+        MACHINE_NAME="rpi5"
         ;;
     *)
         echo "Unknown machine. Using default configuration."
