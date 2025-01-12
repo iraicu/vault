@@ -7,10 +7,9 @@ if [ -z "$1" ]; then
 fi
 
 DISK_TYPE=$1
-MACHINE_NAME=$(hostname)
 
 # Machine-specific configurations
-case $MACHINE_NAME in
+case $(hostname) in
     "epycbox")
         if [ "$DISK_TYPE" == "HDD" ]; then
             temp_dir="/data-l/varvara/tmp"
@@ -26,6 +25,7 @@ case $MACHINE_NAME in
         buffer=262144
         buckets=128
         stripe=65536
+        MACHINE_NAME="epycbox"
         ;;
     "orangepi5plus")
         if [ "$DISK_TYPE" == "HDD" ]; then
@@ -42,6 +42,7 @@ case $MACHINE_NAME in
         buffer=16384
         buckets=128
         stripe=32768
+        MACHINE_NAME="opi5"
         ;;
     "raspberrypi5")
         if [ "$DISK_TYPE" == "HDD" ]; then
@@ -58,6 +59,7 @@ case $MACHINE_NAME in
         buffer=2048
         buckets=128
         stripe=32768
+        MACHINE_NAME="rpi5"
         ;;
     *)
         echo "Unknown machine. Using default configuration."
@@ -112,14 +114,14 @@ run_plotter() {
     echo "Completed k=$k. Log saved to $log_file."
 
     # Extract relevant data from the log
-    local tmp_dir=$(grep "Starting plotting progress into temporary dirs:" "$log_file" | awk '{print $6}')
+    local temp_dir=$(grep -oP "Starting plotting progress into temporary dirs: \K[^ ]+" "$log_file")
     local final_dir=$(grep "Final Directory is:" "$log_file" | awk '{print $4}')
     local phase_1_time=$(grep "Time for phase 1" "$log_file" | awk '{print $6}')
     local phase_2_time=$(grep "Time for phase 2" "$log_file" | awk '{print $6}')
     local phase_3_time=$(grep "Time for phase 3" "$log_file" | awk '{print $6}')
     local phase_4_time=$(grep "Time for phase 4" "$log_file" | awk '{print $6}')
     local total_time=$(grep "Total time" "$log_file" | awk '{print $4}')
-    local final_file_size=$(grep "Final File size:" "$log_file" | awk '{print $5, $6}')
+    local final_file_size=$(grep "Final File size:" "$log_file" | awk '{print $5}' | sed 's/[A-Za-z]*//g' | sed 's/ *$//')
 
     # Append extracted data to the CSV file
     echo "$k,$tmp_dir,$final_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time,$final_file_size" >> "$output_file"
