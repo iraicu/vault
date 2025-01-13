@@ -1,0 +1,5 @@
+Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time
+1,512,16,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,806.723,241.221,458.648,31.418,1538.011
+1,512,32,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,866.643,243.661,419.916,31.324,1561.546
+1,512,64,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,842.988,246.895,414.636,30.860,1535.382
+1,512,128,32768,/data-fast/varvara/tmp,/data-fast/varvara/plot,853.562,243.305,412.929,29.971,1539.769

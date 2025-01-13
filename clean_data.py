@@ -1,21 +1,14 @@
-import csv
+import pandas as pd
 
-# Input and output file paths
-input_file = "data/rpi5/chia-param-C0-NVME-revised.csv"  # Replace with your input CSV file path
-output_file = "data/rpi5/filtered_data.csv"  # Replace with your desired output CSV file path
+# Load the combined CSV data
+file_path = "data/rpi5/chia-param-C0-NVME.csv"
+data = pd.read_csv(file_path)
 
-# Open the input file for reading and output file for writing
-with open(input_file, "r") as infile, open(output_file, "w", newline="") as outfile:
-    reader = csv.DictReader(infile)
-    writer = csv.DictWriter(outfile, fieldnames=reader.fieldnames)
-    
-    # Write the header to the output file
-    writer.writeheader()
-    
-    # Process each row
-    for row in reader:
-        # Check if all time columns are filled
-        if all(row[column] for column in ["Phase_1_Time", "Phase_2_Time", "Phase_3_Time", "Phase_4_Time", "Total_Time"]):
-            writer.writerow(row)  # Write only rows with complete time data
+# Filter rows where Total_Time is less than 1010
+filtered_data = data[data['Total_Time'] < 1010]
 
-print(f"Filtered data saved to {output_file}")
+# Save the filtered data to a new CSV file
+output_file = "data/rpi5/filtered_data_below_1010.csv"
+filtered_data.to_csv(output_file, index=False)
+
+print(f"Filtered data saved to {output_file}. Rows with Total_Time < 1010: {len(filtered_data)}")
