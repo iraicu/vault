@@ -1,0 +1,64 @@
+
+Bladebit Chia Plotter
+Version      : 3.1.0
+Git Commit   : e9836f8bd963321457bc86eb5d61344bfb76dcf0
+Compiled With: gcc 9.4.0
+
+[Global Plotting Config]
+ Will create 1 plots.
+ Thread count          : 1
+ Warm start enabled    : false
+ NUMA disabled         : false
+ CPU affinity disabled : false
+ Farmer public key     : 81f61d3cfabbe5f9b9fd6b1e078e0a4bab42f126a77b013f174644df7243f10e6266e3e7d180d48dddf1ec2c622c2a2b
+ Pool public key       : b403d3c00ff9c9274e01385471b86003ea36c7ab58aad12d2a711b316edd560ee9816a532123eea2c14782889e491d7c
+ Benchmark mode        : disabled
+
+System Memory: 469/472 GiB.
+Memory required: 416 GiB.
+Allocating buffers.
+
+Generating plot 1 / 1: e5b00e007cfa38426fa51dd8e9d6c7d675d5d1ace7ef17cae91b640232d71689
+Plot temporary file: /data-fast/varvara/plot/plot-k32-2025-01-10-04-15-e5b00e007cfa38426fa51dd8e9d6c7d675d5d1ace7ef17cae91b640232d71689.plot.tmp
+
+Running Phase 1
+Generating F1...
+Finished F1 generation in 26.60 seconds.
+Sorting F1...
+Finished F1 sort in 68.94 seconds.
+Progress update: 0.01
+Forward propagating to table 2...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 3.8960 seconds. Created 0 pairs.
+  Average of 0.0000 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 0.0000 seconds.
+  Sorting entries...
+  Finished sorting in 0.00 seconds.
+Finished forward propagating table 2 in 20.05 seconds.
+Progress update: 0.06
+Forward propagating to table 3...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 0.0000 seconds. Created 0 pairs.
+  Average of -nan pairs per group.
+  Computing Fx...
+  Finished computing Fx in 0.0000 seconds.
+  Sorting entries...
+STDERR: *** Crashed! ***
+
+STDERR: /data-l/varvara/chia-blockchain/.venv/bin/bladebit_cuda(_Z12CrashHandleri+0xaa)[0x5576903c4fda]
+
+STDERR: /lib/x86_64-linux-gnu/libc.so.6(+0x42520)[0x7fd4ff5f0520]
+
+STDERR: /data-l/varvara/chia-blockchain/.venv/bin/bladebit_cuda(_ZN8SortYJob11SortYThreadILb1EEEvPS_+0xf6)[0x5576903c8636]
+
+STDERR: /data-l/varvara/chia-blockchain/.venv/bin/bladebit_cuda(_ZN10ThreadPool17FixedThreadRunnerEPv+0x52)[0x55769053b4f2]
+
+STDERR: /data-l/varvara/chia-blockchain/.venv/bin/bladebit_cuda(_ZN6Thread17ThreadStarterUnixEPS_+0x7c)[0x5576903c606c]
+
+STDERR: /lib/x86_64-linux-gnu/libc.so.6(+0x94ac3)[0x7fd4ff642ac3]
+
+STDERR: /lib/x86_64-linux-gnu/libc.so.6(+0x126850)[0x7fd4ff6d4850]
+
+STDERR: Dumping crash to crash.log
+
