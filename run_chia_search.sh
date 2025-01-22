@@ -19,21 +19,32 @@ chia plots check -n 100 -g "$PLOT_FILE" > "$TEMP_LOG" 2>&1
 echo "Looking_Up_Qualities(ms),Finding_Proof(ms),Total_Time(ms)" > "$OUTPUT_CSV"
 
 # Extract relevant data and process it
-grep -E "Looking up qualities|Finding proof" "$TEMP_LOG" | awk '
-BEGIN {
-    lookup_time = 0;
-    proof_time = 0;
-}
-{
-    if ($6 == "qualities") {
-        lookup_time = $7;  # Capture "Looking up qualities" time
-    } else if ($4 == "proof") {
-        proof_time = $5;  # Capture "Finding proof" time
-        total_time = lookup_time + proof_time;  # Calculate total time
-        # Append the times to the CSV file
-        printf "%s,%s,%s\n", lookup_time, proof_time, total_time >> "'$OUTPUT_CSV'"
-    }
-}'
+LOOKUP_TIMES=()
+PROOF_TIMES=()
+
+# Read the log file line by line
+while IFS= read -r line; do
+    if [[ "$line" =~ Looking\ up\ qualities\ took:\ ([0-9]+)\ ms ]]; then
+        LOOKUP_TIMES+=("${BASH_REMATCH[1]}")
+    elif [[ "$line" =~ Finding\ proof\ took:\ ([0-9]+)\ ms ]]; then
+        PROOF_TIMES+=("${BASH_REMATCH[1]}")
+    fi
+done < "$TEMP_LOG"
+
+# Ensure equal entries for lookup and proof times
+if [ "${#LOOKUP_TIMES[@]}" -ne "${#PROOF_TIMES[@]}" ]; then
+    echo "Error: Mismatched number of 'Looking up qualities' and 'Finding proof' entries."
+    rm -f "$TEMP_LOG"
+    exit 1
+fi
+
+# Write data to CSV
+for ((i = 0; i < ${#LOOKUP_TIMES[@]}; i++)); do
+    LOOKUP="${LOOKUP_TIMES[$i]}"
+    PROOF="${PROOF_TIMES[$i]}"
+    TOTAL=$((LOOKUP + PROOF))
+    echo "$LOOKUP,$PROOF,$TOTAL" >> "$OUTPUT_CSV"
+done
 
 # Clean up temporary log file
 #rm -f "$TEMP_LOG"
