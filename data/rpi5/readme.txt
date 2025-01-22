@@ -14,3 +14,7 @@ Time for phase 4 = 910.242 seconds. CPU (97.800%) Mon Jan 13 02:12:29 2025
 Approximate working space used (without final file): 269.341 GiB
 Final File size: 101.354 GiB
 Total time = 40991.909 seconds. CPU (118.560%) Mon Jan 13 02:12:29 2025
+
+
+chia-C0-NVME.csv: 
+k25-k33 -- 2 threads, 2048 MB; k34-k35 -- 2 threads, 4096 MB (2 GB is not enough to sort in memory)
