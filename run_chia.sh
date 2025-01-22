@@ -114,6 +114,7 @@ run_plotter() {
     echo "Completed k=$k. Log saved to $log_file."
 
     # Extract relevant data from the log
+    local final_file=$(grep -oP "Renamed final file from temporary file: \K.+" "$log_file")
     local temp_dir=$(grep -oP "Starting plotting progress into temporary dirs: \K[^ ]+" "$log_file")
     local final_dir=$(grep "Final Directory is:" "$log_file" | awk '{print $4}')
     local phase_1_time=$(grep "Time for phase 1" "$log_file" | awk '{print $6}')
@@ -125,6 +126,13 @@ run_plotter() {
 
     # Append extracted data to the CSV file
     echo "$k,$tmp_dir,$final_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time,$final_file_size" >> "$output_file"
+
+    if [ -n "$final_file" ]; then
+        echo "Calling ./run_chia_search.sh with $final_dir..."
+        ./run_chia_search.sh "$final_file" "$MACHINE_NAME" "$DISK_TYPE"
+    else
+        echo "Error: Unable to determine the newly created plot file."
+    fi
 
     # Cleanup directories after plot is created
     cleanup_directories

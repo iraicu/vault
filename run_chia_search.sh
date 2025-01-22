@@ -43,7 +43,7 @@ for ((i = 0; i < ${#LOOKUP_TIMES[@]}; i++)); do
     LOOKUP="${LOOKUP_TIMES[$i]}"
     PROOF="${PROOF_TIMES[$i]}"
     TOTAL=$((LOOKUP + PROOF))
-    echo "$LOOKUP,$PROOF,$TOTAL" >> "$OUTPUT_CSV"
+    echo "$LOOKUP,$PROOF,$TOTAL" >> "$OUTPUT_CSV" 
 done
 
 # Clean up temporary log file
