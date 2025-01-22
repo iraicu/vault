@@ -1,0 +1,31 @@
+
+Starting plotting progress into temporary dirs: /data-l/varvara/tmp and /data-l/varvara/tmp
+ID: f834fab9bde27cdb4f394ec8e5a41f758127b706270bcd5629332a0047f6b29b
+Plot size is: 27
+Buffer size is: 4096MiB
+Using 16 buckets
+Final Directory is: /data-l/varvara/plot
+Using 1 threads of stripe size 4096
+Process ID is: 754411
+
+Starting phase 1/4: Forward Propagation into tmp files... Wed Jan  8 05:30:46 2025
+Computing table 1
+Progress update: 0.01
+F1 complete, time: 4.241 seconds. CPU (99.93%) Wed Jan  8 05:30:51 2025
+Computing table 2
+Progress update: 0.06
+	Bucket 0 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 1 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 2 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 3 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 4 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 5 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 6 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 7 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.
+	Bucket 8 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 9 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 10 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 11 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 12 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 13 uniform sort. Ram: 3.946GiB, u_sort min: 0.250GiB, qs min: 0.063GiB.
+	Bucket 14 uniform sort. Ram: 3.946GiB, u_sort min: 0.125GiB, qs min: 0.062GiB.

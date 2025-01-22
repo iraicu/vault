@@ -1,0 +1,169 @@
+
+Bladebit Chia Plotter
+Version      : 3.1.0
+Git Commit   : e9836f8bd963321457bc86eb5d61344bfb76dcf0
+Compiled With: gcc 9.4.0
+
+[Global Plotting Config]
+ Will create 1 plots.
+ Thread count          : 32
+ Warm start enabled    : false
+ NUMA disabled         : false
+ CPU affinity disabled : false
+ Farmer public key     : 81f61d3cfabbe5f9b9fd6b1e078e0a4bab42f126a77b013f174644df7243f10e6266e3e7d180d48dddf1ec2c622c2a2b
+ Pool public key       : b403d3c00ff9c9274e01385471b86003ea36c7ab58aad12d2a711b316edd560ee9816a532123eea2c14782889e491d7c
+ Benchmark mode        : disabled
+
+System Memory: 469/472 GiB.
+Memory required: 416 GiB.
+Allocating buffers.
+
+Generating plot 1 / 1: 82ed43034594f0fcfeb6be8c127ee1a5b0af5635ad93e2ed7caccfcb7d9634ec
+Plot temporary file: /data-l/varvara/plot/plot-k32-2025-01-09-22-47-82ed43034594f0fcfeb6be8c127ee1a5b0af5635ad93e2ed7caccfcb7d9634ec.plot.tmp
+
+Running Phase 1
+Generating F1...
+Finished F1 generation in 5.84 seconds.
+Sorting F1...
+Finished F1 sort in 16.26 seconds.
+Progress update: 0.01
+Forward propagating to table 2...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 19.5420 seconds. Created 4294967296 pairs.
+  Average of 236.1406 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 23.4930 seconds.
+  Sorting entries...
+  Finished sorting in 45.85 seconds.
+Finished forward propagating table 2 in 89.68 seconds.
+Progress update: 0.06
+Forward propagating to table 3...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 16.5640 seconds. Created 4294967296 pairs.
+  Average of 236.1406 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 22.8270 seconds.
+  Sorting entries...
+  Finished sorting in 44.93 seconds.
+Finished forward propagating table 3 in 85.11 seconds.
+Progress update: 0.12
+Forward propagating to table 4...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 16.5660 seconds. Created 4294967296 pairs.
+  Average of 236.1406 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 23.5520 seconds.
+  Sorting entries...
+  Finished sorting in 44.40 seconds.
+Finished forward propagating table 4 in 85.31 seconds.
+Progress update: 0.2
+Forward propagating to table 5...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 16.4970 seconds. Created 4294967296 pairs.
+  Average of 236.1406 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 40.4180 seconds.
+  Sorting entries...
+  Finished sorting in 44.38 seconds.
+Finished forward propagating table 5 in 102.08 seconds.
+Progress update: 0.28
+Forward propagating to table 6...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 16.5670 seconds. Created 4294940796 pairs.
+  Average of 236.1392 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 22.9780 seconds.
+  Sorting entries...
+  Finished sorting in 43.01 seconds.
+Finished forward propagating table 6 in 83.34 seconds.
+Progress update: 0.36
+Forward propagating to table 7...
+  Pairing L/R groups...
+  Finished pairing L/R groups in 16.5580 seconds. Created 4294847606 pairs.
+  Average of 236.1340 pairs per group.
+  Computing Fx...
+  Finished computing Fx in 22.7810 seconds.
+Finished forward propagating table 7 in 40.13 seconds.
+Progress update: 0.42
+Finished Phase 1 in 507.77 seconds.
+Running Phase 2
+  Prunning table 6...
+  Finished prunning table 6 in 0.89 seconds.
+Progress update: 0.43
+  Prunning table 5...
+  Finished prunning table 5 in 15.26 seconds.
+Progress update: 0.48
+  Prunning table 4...
+  Finished prunning table 4 in 13.46 seconds.
+Progress update: 0.51
+  Prunning table 3...
+  Finished prunning table 3 in 13.25 seconds.
+Progress update: 0.55
+  Prunning table 2...
+  Finished prunning table 2 in 13.35 seconds.
+Progress update: 0.58
+Finished Phase 2 in 56.79 seconds.
+Running Phase 3
+  Compressing tables 1 and 2...
+  Finished compressing tables 1 and 2 in 45.95 seconds
+Progress update: 0.66
+  Table 1 now has 3429374660 / 4294967296 entries ( 79.85% ).
+  Compressing tables 2 and 3...
+  Finished compressing tables 2 and 3 in 47.44 seconds
+Progress update: 0.73
+  Table 2 now has 3439875255 / 4294967296 entries ( 80.09% ).
+  Compressing tables 3 and 4...
+  Finished compressing tables 3 and 4 in 47.27 seconds
+Progress update: 0.79
+  Table 3 now has 3466128917 / 4294967296 entries ( 80.70% ).
+  Compressing tables 4 and 5...
+  Finished compressing tables 4 and 5 in 48.21 seconds
+Progress update: 0.85
+  Table 4 now has 3533017659 / 4294967296 entries ( 82.26% ).
+  Compressing tables 5 and 6...
+  Finished compressing tables 5 and 6 in 50.59 seconds
+Progress update: 0.92
+  Table 5 now has 3713669788 / 4294940796 entries ( 86.47% ).
+  Compressing tables 6 and 7...
+  Finished compressing tables 6 and 7 in 55.42 seconds
+Progress update: 0.98
+  Table 6 now has 4294847606 / 4294847606 entries ( 100.00% ).
+Finished Phase 3 in 294.88 seconds.
+Running Phase 4
+  Writing P7.
+  Finished writing P7 in 0.83 seconds.
+  Writing C1 table.
+  Finished writing C1 table in 0.00 seconds.
+  Writing C2 table.
+  Finished writing C2 table in 0.00 seconds.
+  Writing C3 table.
+  Finished writing C3 table in 0.54 seconds.
+Finished Phase 4 in 1.38 seconds.
+Writing final plot tables to disk
+/data-l/varvara/plot/plot-k32-2025-01-09-22-47-82ed43034594f0fcfeb6be8c127ee1a5b0af5635ad93e2ed7caccfcb7d9634ec.plot.tmp -> /data-l/varvara/plot/plot-k32-2025-01-09-22-47-82ed43034594f0fcfeb6be8c127ee1a5b0af5635ad93e2ed7caccfcb7d9634ec.plot
+Final plot table pointers:
+ Table 1:             4096 ( 0x0000000000001000 )
+ Table 2:      14839423096 ( 0x00000003747fa078 )
+ Table 3:      28822317871 ( 0x00000006b5f1ab2f )
+ Table 4:      42911930821 ( 0x00000009fdc019c5 )
+ Table 5:      57273446596 ( 0x0000000d55c370c4 )
+ Table 6:      72369302296 ( 0x00000010d98beb18 )
+ Table 7:      89827609846 ( 0x00000014ea248cf6 )
+ C 1    :     107543859958 ( 0x000000190a1d12f6 )
+ C 2    :     107545577902 ( 0x000000190a3749ae )
+ C 3    :     107545578078 ( 0x000000190a374a5e )
+
+Final plot table sizes:
+ Table 1: 14151.97 MiB
+ Table 2: 13335.13 MiB
+ Table 3: 13436.90 MiB
+ Table 4: 13696.21 MiB
+ Table 5: 14396.53 MiB
+ Table 6: 16649.54 MiB
+ Table 7: 16895.53 MiB
+ C 1    : 1.64 MiB
+ C 2    : 0.00 MiB
+ C 3    : 1228.77 MiB
+
+Finished writing tables to disk in 266.77 seconds.
+Finished plotting in 1127.59 seconds (18.79 minutes).
