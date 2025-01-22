@@ -46,7 +46,7 @@ case $(hostname) in
         output_dir="data/opi5"
         threads_list=(1 2 4 8)
 	    max_memory=16384
-        buffer_range=(512 1024 2048 4096 8192 16384)
+        buffer_range=(1024 2048 4096 8192 16384)
         bucket_range=(64 128)
 	    stripe_range=(32768 65536 131072 262144)
         max_threads=8
@@ -98,12 +98,12 @@ output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
 k=27
 
 # Initialize the log file with headers
-echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time" > $output_file
+#echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time" > $output_file
 
 # Function to run a single test
 run_test() {
-    local threads=$1
-    local buffer=16384
+    local threads=8
+    local buffer=$1
     local buckets=128
     local stripe=32768
 
@@ -122,9 +122,9 @@ run_test() {
     echo "$threads,$buffer,$buckets,$stripe,$temp_dir,$plot_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time" >> $output_file
 }
 
-for threads in "${threads_list[@]}"; do
-    echo "Testing with $threads threads..."
-    run_test $threads
+for buffer in "${buffer_range[@]}"; do
+    echo "Testing with $buffer (MB) buffer..."
+    run_test $buffer
 done
 
 # threads=2
