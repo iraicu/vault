@@ -45,10 +45,10 @@ case $(hostname) in
         fi
         output_dir="data/opi5"
         threads_list=(1 2 4 8)
-	    max_memory=16384
+	max_memory=16384
         buffer_range=(512 1024 2048 4096 8192 16384)
         bucket_range=(64 128)
-	    stripe_range=(32768 65536 131072 262144)
+	stripe_range=(32768 65536 131072 262144)
         max_threads=8
         ram=16384
         ;;
