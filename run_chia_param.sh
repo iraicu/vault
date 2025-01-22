@@ -44,9 +44,9 @@ case $(hostname) in
             exit 1
         fi
         output_dir="data/opi5"
-        threads_list=(2 4 8)
+        threads_list=(1 2 4 8)
 	max_memory=16384
-        buffer_range=(512 1024 2048 4096 8192 16384)
+        buffer_range=(1024 2048 4096 8192 16384)
         bucket_range=(64 128)
 	stripe_range=(32768 65536 131072 262144)
         max_threads=8
@@ -92,25 +92,25 @@ mkdir -p $temp_dir
 mkdir -p $plot_dir
 
 # Set the output file name
-output_file="$output_dir/chia-param-C0-$DISK_TYPE-revised2.csv"
+output_file="$output_dir/chia-param-C0-$DISK_TYPE.csv"
 
 # Set the constant k
 k=27
 
 # Initialize the log file with headers
-echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time" > $output_file
+#echo "Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time" > $output_file
 
 # Function to run a single test
 run_test() {
-    #local threads=$1
+    local threads=8
     local buffer=$1
-    local buckets=$2
-    local stripe=$3
+    local buckets=128
+    local stripe=32768
 
     ./drop-all-caches.sh $DISK_TYPE
 
     log_file="chia_plot_$threads_$buffer_$buckets_$stripe.log"
-    chia plotters chiapos --override-k -k $k -r 64 -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir > "$log_file" 2>&1
+    chia plotters chiapos --override-k -k $k -r $threads -b $buffer -u $buckets -s $stripe -t $temp_dir -d $plot_dir > "$log_file" 2>&1
 
     # Extract times from log
     phase_1_time=$(grep "Time for phase 1" "$log_file" | awk '{print $6}')
@@ -122,24 +122,29 @@ run_test() {
     echo "$threads,$buffer,$buckets,$stripe,$temp_dir,$plot_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time" >> $output_file
 }
 
-threads=2
-buffer=1024
-buckets=128
+for buffer in "${buffer_range[@]}"; do
+    echo "Testing with $buffer (MB) buffer..."
+    run_test $buffer
+done
+
+# threads=2
+# buffer=1024
+# buckets=128
 
 # Start the loop
-while [ $threads -le ${threads_list[-1]} ]; do
-    while [ $buffer -le $max_memory ]; do
-        for buckets in "${bucket_range[@]}"; do
-            for stripe in "${stripe_range[@]}"; do
-                echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
-                run_test $buffer $buckets $stripe
-            done
-        done
-        buffer=$((buffer * 2))
-    done
-    threads=$((threads * 2))
-    buffer=1024
-done
+# while [ $threads -le ${threads_list[-1]} ]; do
+#     while [ $buffer -le $max_memory ]; do
+#         for buckets in "${bucket_range[@]}"; do
+#             for stripe in "${stripe_range[@]}"; do
+#                 echo "Testing: Threads=$threads, Buffer=$buffer, Buckets=$buckets, Stripe=$stripe"
+#                 run_test $buffer $buckets $stripe
+#             done
+#         done
+#         buffer=$((buffer * 2))
+#     done
+#     threads=$((threads * 2))
+#     buffer=1024
+# done
 
 # Test combinations of all parameters
 #for threads in "${threads_list[@]}"; do

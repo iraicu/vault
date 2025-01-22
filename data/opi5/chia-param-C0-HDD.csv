@@ -1,0 +1,10 @@
+Threads,Buffer,Buckets,Stripe,Temp_Dir,Plot_Dir,Phase_1_Time,Phase_2_Time,Phase_3_Time,Phase_4_Time,Total_Time
+1,16384,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,855.057,236.713,417.458,30.471,1539.700
+2,16384,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,623.705,235.406,420.853,30.356,1310.322
+4,16384,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,462.721,235.761,418.361,30.526,1147.371
+8,16384,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,385.110,235.502,418.112,30.830,1069.556
+8,1024,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,383.636,235.375,418.231,30.394,1067.639
+8,2048,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,380.523,233.578,420.236,30.567,1064.906
+8,4096,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,390.813,232.590,418.665,30.662,1072.732
+8,8192,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,391.101,232.538,418.543,30.189,1072.373
+8,16384,128,32768,/data-a/varvara/tmp,/data-a/varvara/plot,388.597,234.434,418.429,29.823,1071.284
