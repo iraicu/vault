@@ -7,7 +7,7 @@ else
 fi
 
 # Output CSV file
-output_file="data/${MACHINE_NAME}/power_readings.csv"
+output_file="data/${MACHINE_NAME}/${1}-power-NVME.csv"
 
 # Add headers to CSV file
 echo "timestamp,power_reading,program_status" > "$output_file"
