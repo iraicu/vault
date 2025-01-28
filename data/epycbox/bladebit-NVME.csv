@@ -1,0 +1,8 @@
+Threads,Phase3_Time,Phase4_Time,Write_Time,Total_Time
+1,,,,
+2,in,in,in,8486.20
+4,in,in,in,4981.53
+8,in,in,in,2955.83
+16,in,in,in,1615.91
+32,in,in,in,884.84
+64,in,in,in,610.25

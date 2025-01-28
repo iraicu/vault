@@ -1,0 +1,4 @@
+Threads,Buckets,Ph3_Ph4_Buckets,Phase1,Phase2,Phase3,Phase4,Total_time
+64,256,256,1025.05,,,,
+64,128,P3+P4:,1022.75,,,,
+64,P1:,P3+P4:,958.325,,,,
