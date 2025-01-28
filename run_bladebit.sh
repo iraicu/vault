@@ -1,6 +1,6 @@
 #!/bin/bash
 
-output_file="data/epycbox/bladebit-NVME.csv"
+output_file="data/8socket/bladebit-ram-C0-SSD.csv"
 
 echo "Threads,Phase3_Time,Phase4_Time,Write_Time,Total_Time" > "$output_file"
 
@@ -31,9 +31,9 @@ run_bladebit_test() {
 #    run_bladebit_test "$threads" "HDD" "/data-l/varvara/plot/"
 #done
 
-for threads in 1 2 4 8 16 32 64; do
-    echo "Running Bladebit test on NVME with $threads threads..."
-    run_bladebit_test "$threads" "NVME" "/data-fast/varvara/plot/"
+for threads in 1 2 4 8 16 32 64 128; do
+    echo "Running Bladebit test on SSD with $threads threads..."
+    run_bladebit_test "$threads" "SSD" "/ssd-raid0/varvara/plot"
 done
 
 echo "Bladebit parameter sweep completed. Results saved to $output_file."
