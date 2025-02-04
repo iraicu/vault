@@ -122,7 +122,7 @@ run_plotter() {
     local phase_3_time=$(grep "Time for phase 3" "$log_file" | awk '{print $6}')
     local phase_4_time=$(grep "Time for phase 4" "$log_file" | awk '{print $6}')
     local total_time=$(grep "Total time" "$log_file" | awk '{print $4}')
-    local final_file_size=$(grep "Final File size:" "$log_file" | awk '{print $5}' | sed 's/[A-Za-z]*//g' | sed 's/ *$//')
+    local final_file_size=$(grep -oP "Final File size:\s*\K[0-9\.]+" "$log_file")
 
     # Append extracted data to the CSV file
     echo "$k,$tmp_dir,$final_dir,$phase_1_time,$phase_2_time,$phase_3_time,$phase_4_time,$total_time,$final_file_size" >> "$output_file"
