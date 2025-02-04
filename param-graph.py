@@ -56,8 +56,12 @@ for machine in machines:
             ax.set_ylabel("Total Time (sec)", fontsize=12)
             ax.set_title(f"{title} vs Time", fontsize=14)
 
+        # Add the machine name at the bottom of the plot
+        plt.suptitle(f"Performance Parameter Sweep for {machine} ({drive_type})", fontsize=16)
+        # fig.text(0.5, 0.02, f"Machine: {machine}", ha="center", fontsize=12, style="italic")
+
         # Adjust layout and save the combined plot
-        plt.tight_layout()
+        plt.tight_layout(rect=[0, 0.04, 1, 0.96])  # Adjust layout to fit subtitle
         output_file = os.path.join(output_dir, f"param-C0-{drive_type}.svg")
         plt.savefig(output_file)
         plt.close()
