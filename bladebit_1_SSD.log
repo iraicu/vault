@@ -1,0 +1,29 @@
+
+Bladebit Chia Plotter
+Version      : 3.1.0
+Git Commit   : e9836f8bd963321457bc86eb5d61344bfb76dcf0
+Compiled With: gcc 9.4.0
+
+[Global Plotting Config]
+ Will create 1 plots.
+ Thread count          : 1
+ Warm start enabled    : false
+ NUMA disabled         : false
+ CPU affinity disabled : false
+ Farmer public key     : 932e0bcaed80fc8a17df11ba02f64458ee577fab8e8371ec6eec319e4b5db93531c77742409f0394a93ce6631f236a12
+ Pool public key       : b0b5175b14be7010ff36e53a1c365a503ed45a0a2a326f9d1e2d24b34466d317801deced05dee1dcc7f404324b672298
+ Benchmark mode        : disabled
+
+System Memory: 659/770 GiB.
+Memory required: 416 GiB.
+Allocating buffers.
+
+Generating plot 1 / 1: ecde36de815f90f61afa9aac602273f74acb3b377e27ae8f1f3e9153bf260905
+Plot temporary file: /ssd-raid0/varvara/plot/plot-k32-2025-01-22-15-10-ecde36de815f90f61afa9aac602273f74acb3b377e27ae8f1f3e9153bf260905.plot.tmp
+
+Running Phase 1
+Generating F1...
+Finished F1 generation in 28.06 seconds.
+Sorting F1...
+
+Aborted!
