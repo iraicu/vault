@@ -44,11 +44,21 @@ case $(hostname) in
         ;;
     "epycbox")
         OUTPUT_DIR="data/epycbox"
-        RAM=262144
+        RAM=131072
         HASH_THREADS=8
-        SORT_THREADS=64
-        IO_THREADS=1
+        SORT_THREADS=32
+        IO_THREADS=64
         MAKE_TARGET="vault_x86"
+	if [ "$DISK_TYPE" == "HDD" ]; then
+	   IO_THREADS=64
+	   OUTPUT_FILE="log-C0-HDD.csv"
+	elif [ "$DISK_TYPE" == "NVME" ]; then
+    	   IO_THREADS=8
+    	   OUTPUT_FILE="log-C0-NVMe.csv"
+	else
+    	   echo "Invalid disk type. Use 'HDD' or 'NVME'."
+	   exit 1
+	fi
         ;;
     "raspberrypi5")
         OUTPUT_DIR="data/rpi5"
