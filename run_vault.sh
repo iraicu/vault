@@ -51,7 +51,7 @@ case $(hostname) in
         MAKE_TARGET="vault_x86"
 	if [ "$DISK_TYPE" == "HDD" ]; then
 	   IO_THREADS=64
-	   OUTPUT_FILE="log-C0-HDD.csv"
+	   OUTPUT_FILE="log-C0-HDD-optimal-parameters.csv"
 	elif [ "$DISK_TYPE" == "NVME" ]; then
     	   IO_THREADS=8
     	   OUTPUT_FILE="log-C0-NVMe.csv"
@@ -98,7 +98,7 @@ run_tests() {
 
     for k in $(seq $k_start $k_end)
     do
-        $CACHE_DROP_SCRIPT
+        $CACHE_DROP_SCRIPT $DISK_TYPE
         output=$(./vault -t $HASH_THREADS -o $SORT_THREADS -i $IO_THREADS -f vault$k.memo -m $RAM -k $k -w true)
         echo "$k,$RAM,$output" >> $OUTPUT_FILE
     done
