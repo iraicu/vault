@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/ssd-raid0/varvara/chia-blockchain/.venv/bin/chia", line 3, in <module>
+    from chia.cmds.chia import main
+  File "/ssd-raid0/varvara/chia-blockchain/chia/cmds/chia.py", line 9, in <module>
+    from chia.cmds.beta import beta_cmd
+  File "/ssd-raid0/varvara/chia-blockchain/chia/cmds/beta.py", line 10, in <module>
+    from chia.cmds.beta_funcs import (
+  File "/ssd-raid0/varvara/chia-blockchain/chia/cmds/beta_funcs.py", line 8, in <module>
+    from chia.cmds.cmds_util import format_bytes, prompt_yes_no, validate_directory_writable
+  File "/ssd-raid0/varvara/chia-blockchain/chia/cmds/cmds_util.py", line 11, in <module>
+    from aiohttp import ClientConnectorCertificateError, ClientConnectorError
+  File "/ssd-raid0/varvara/chia-blockchain/.venv/lib/python3.10/site-packages/aiohttp/__init__.py", line 6, in <module>
+    from .client import (
+  File "/ssd-raid0/varvara/chia-blockchain/.venv/lib/python3.10/site-packages/aiohttp/client.py", line 39, in <module>
+    from . import hdrs, http, payload
+  File "/ssd-raid0/varvara/chia-blockchain/.venv/lib/python3.10/site-packages/aiohttp/http.py", line 7, in <module>
+    from .http_parser import (
+  File "/ssd-raid0/varvara/chia-blockchain/.venv/lib/python3.10/site-packages/aiohttp/http_parser.py", line 50, in <module>
+    from .streams import EMPTY_PAYLOAD, StreamReader
+  File "/ssd-raid0/varvara/chia-blockchain/.venv/lib/python3.10/site-packages/aiohttp/streams.py", line 516, in <module>
+    class EmptyStreamReader(StreamReader):  # lgtm [py/missing-call-to-init]
+KeyboardInterrupt

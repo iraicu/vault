@@ -1,6 +1,7 @@
 param-C0-HDD.csv
 FOLDER: /data-l/varvara/vault
 SCRIPT: ./run_param.sh HDD 
+k32
 
 log-C0-HDD.txt
 FOLDER: /data-l/varvara/vault
