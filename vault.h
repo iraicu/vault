@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "blake3.h"
+#include "blake3/blake3.h"
 #include <time.h>
 #include <string.h>
 #include <stdbool.h>

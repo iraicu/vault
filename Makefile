@@ -1,9 +1,4 @@
-# This Makefile is only for testing. C callers should follow the instructions
-# in ./README.md to incorporate these C files into their existing build.
-
 NAME=blake3
-#CC=llvm
-#CC=gcc
 CC=gcc
 CCP=g++-14
 #torus
@@ -25,76 +20,75 @@ RECORD_SIZE ?= 8
 ifdef BLAKE3_NO_SSE2
 EXTRAFLAGS += -DBLAKE3_NO_SSE2
 else
-TARGETS += blake3_sse2.o
-ASM_TARGETS += blake3_sse2_x86-64_unix.S
+TARGETS += blake3/blake3_sse2.o
+ASM_TARGETS += blake3/blake3_sse2_x86-64_unix.S
 endif
 
 ifdef BLAKE3_NO_SSE41
 EXTRAFLAGS += -DBLAKE3_NO_SSE41
 else
-TARGETS += blake3_sse41.o
-ASM_TARGETS += blake3_sse41_x86-64_unix.S
+TARGETS += blake3/blake3_sse41.o
+ASM_TARGETS += blake3/blake3_sse41_x86-64_unix.S
 endif
 
 ifdef BLAKE3_NO_AVX2
 EXTRAFLAGS += -DBLAKE3_NO_AVX2
 else
-TARGETS += blake3_avx2.o
-ASM_TARGETS += blake3_avx2_x86-64_unix.S
+TARGETS += blake3/blake3_avx2.o
+ASM_TARGETS += blake3/blake3_avx2_x86-64_unix.S
 endif
 
 ifdef BLAKE3_NO_AVX512
 EXTRAFLAGS += -DBLAKE3_NO_AVX512
 else
-TARGETS += blake3_avx512.o
-ASM_TARGETS += blake3_avx512_x86-64_unix.S
+TARGETS += blake3/blake3_avx512.o
+ASM_TARGETS += blake3/blake3_avx512_x86-64_unix.S
 endif
 
 ifdef BLAKE3_USE_NEON
 EXTRAFLAGS += -DBLAKE3_USE_NEON=1
-TARGETS += blake3_neon.o
+TARGETS += blake3/blake3_neon.o
 endif
 
 ifdef BLAKE3_NO_NEON
 EXTRAFLAGS += -DBLAKE3_USE_NEON=0
 endif
 
-all: blake3.c blake3_dispatch.c blake3_portable.c main.c $(TARGETS)
+all: blake3/blake3.c blake3/blake3_dispatch.c blake3/blake3_portable.c main.c $(TARGETS)
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) $^ -o $(NAME) $(LDFLAGS)
 
-blake3_sse2.o: blake3_sse2.c
+blake3_sse2.o: blake3/blake3_sse2.c
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) -c $^ -o $@ -msse2
 
-blake3_sse41.o: blake3_sse41.c
+blake3_sse41.o: blake3/blake3_sse41.c
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) -c $^ -o $@ -msse4.1
 
-blake3_avx2.o: blake3_avx2.c
+blake3_avx2.o: blake3/blake3_avx2.c
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) -c $^ -o $@ -mavx2
 
-blake3_avx512.o: blake3_avx512.c
+blake3_avx512.o: blake3/blake3_avx512.c
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) -c $^ -o $@ -mavx512f -mavx512vl
 
-blake3_neon.o: blake3_neon.c
+blake3_neon.o: blake3/blake3_neon.c
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) -c $^ -o $@
 
 test: CFLAGS += -DBLAKE3_TESTING -fsanitize=address,undefined
 test: all
 	./test.py
 
-asm: blake3.c blake3_dispatch.c blake3_portable.c main.c $(ASM_TARGETS)
+asm: blake3/blake3.c blake3/blake3_dispatch.c blake3/blake3_portable.c main.c $(ASM_TARGETS)
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) $^ -o $(NAME) $(LDFLAGS)
 
 test_asm: CFLAGS += -DBLAKE3_TESTING -fsanitize=address,undefined 
 test_asm: asm
 	./test.py
 
-vault_x86: vault.c blake3.c blake3_dispatch.c blake3_portable.c $(ASM_TARGETS)
+vault_x86: vault.c blake3/blake3.c blake3/blake3_dispatch.c blake3/blake3_portable.c $(ASM_TARGETS)
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) $^ -DNONCE_SIZE=$(NONCE_SIZE) -DRECORD_SIZE=$(RECORD_SIZE) -o vault $(LDFLAGS)
 
 
-vault_arm: vault.c blake3.c blake3_dispatch.c blake3_portable.c
+vault_arm: vault.c blake3/blake3.c blake3/blake3_dispatch.c blake3/blake3_portable.c
 	$(CC) $(CFLAGS) $(EXTRAFLAGS) $^ -DNONCE_SIZE=$(NONCE_SIZE) -DRECORD_SIZE=$(RECORD_SIZE) -o vault $(LDFLAGS)
-
 
 
 vault_mac: vault.c
